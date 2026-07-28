@@ -29,6 +29,7 @@ $user = current_user();
       <a href="team.php" class="nav-item <?= $activeNav === 'team' ? 'active' : '' ?>">Nhân viên &amp; Lịch</a>
     </nav>
     <div class="sidebar-footer">
+      <a href="shop.php" target="_blank" rel="noopener" class="nav-item" style="font-size:12.5px;">Trang khách hàng ↗</a>
       <div class="user-chip">
         <div class="avatar"><?= htmlspecialchars(mb_substr($user['name'] ?? '?', 0, 1)) ?></div>
         <div>

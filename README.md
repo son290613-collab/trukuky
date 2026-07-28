@@ -12,6 +12,7 @@ Viết bằng PHP thuần (không framework, không build step) + MySQL, giao di
 - **Phối đồ** — tạo bộ phối đồ (outfit) từ các sản phẩm trong kho, kèm ảnh minh hoạ.
 - **Nhân viên & Lịch** — quản lý tài khoản nhân viên (chỉ quản lý), lịch làm việc 7 ngày tới, checklist công việc hàng ngày (kể cả mẫu Opening Checklist lặp lại mỗi ngày).
 - **Báo cáo** — số đơn và doanh thu theo ngày trong một khoảng thời gian tuỳ chọn.
+- **Trang khách hàng (`shop.php`)** — trang công khai, không cần đăng nhập, hiển thị danh sách sản phẩm và bộ phối đồ kèm nút gọi điện/Zalo/Facebook để khách liên hệ tư vấn. Đây là link nên chia sẻ cho khách hàng (ví dụ dán vào bio Facebook/Instagram), khác với link gốc của app (chỉ dành cho nhân viên đăng nhập).
 
 ## Yêu cầu hệ thống
 
