@@ -140,27 +140,31 @@ document.getElementById('schedule-form').addEventListener('submit', async (e) =>
 });
 
 /* Opening checklist templates (manager only) */
+let taskTemplates = [];
+
 async function loadTemplates() {
   const wrap = document.getElementById('template-rows');
   if (!wrap) return;
-  const templates = await apiFetch('api/task_templates.php');
-  if (!templates.length) {
+  taskTemplates = await apiFetch('api/task_templates.php');
+  if (!taskTemplates.length) {
     wrap.innerHTML = '<div class="empty-state">Chưa có mục mẫu nào.</div>';
     return;
   }
-  wrap.innerHTML = templates.map((t) => `
+  wrap.innerHTML = taskTemplates.map((t) => `
     <div class="check-row ${t.active == 0 ? 'done' : ''}">
-      <input type="checkbox" ${t.active == 1 ? 'checked' : ''} onchange="toggleTemplateActive(${t.id}, '${escapeHtml(t.title).replace(/'/g, "\\'")}', ${t.sort_order}, this.checked)">
+      <input type="checkbox" ${t.active == 1 ? 'checked' : ''} onchange="toggleTemplateActive(${t.id}, this.checked)">
       <span class="check-label">${escapeHtml(t.title)}</span>
       <span class="check-meta">Thứ tự ${t.sort_order}</span>
       <button class="btn btn-sm btn-danger" onclick="deleteTemplate(${t.id})">Xoá</button>
     </div>`).join('');
 }
 
-async function toggleTemplateActive(id, title, sortOrder, active) {
+async function toggleTemplateActive(id, active) {
+  const t = taskTemplates.find((x) => x.id === id);
+  if (!t) return;
   await apiFetch('api/task_templates.php', {
     method: 'PUT',
-    body: { id, title, sort_order: sortOrder, active },
+    body: { id, title: t.title, sort_order: t.sort_order, active },
   });
   await loadTemplates();
 }
