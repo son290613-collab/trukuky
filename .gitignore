@@ -1,0 +1,6 @@
+/config/config.php
+/assets/uploads/*
+!/assets/uploads/.gitkeep
+!/assets/uploads/.htaccess
+.DS_Store
+*.log
