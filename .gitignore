@@ -4,3 +4,4 @@
 !/assets/uploads/.htaccess
 .DS_Store
 *.log
+node_modules/
