@@ -175,7 +175,10 @@ QD = [("M15", "Áo mèo", "M08", "Áo mèo",
       ("M13", "Chân váy đen", "M10", "Chân váy",
        "Sổ và bảng giá 17/9 chỉ có áo sơ mi ren cho M13; giá 590/690 trùng chân váy M10 (C6K01SD019905). "
        "Nếu đúng, cầu chân váy M10 phải cộng thêm các dòng này.",
-       "Trung bình — HỎI Quản lý")]
+       "Trung bình — HỎI Quản lý"),
+      ("M28", "Quần", "M28", "Chân váy kaki",
+       "Tab M28 = 'áo nhung nâu + chân váy kaki nâu' — không có quần; bản cũ gọi nhầm là quần.",
+       "Cao")]
 for i, row in enumerate(QD, start=2):
     for j, v in enumerate(row, 1):
         qd.cell(row=i, column=j, value=v)
@@ -212,15 +215,16 @@ ok.column_dimensions["H"].width = 60
 
 # ======================= GOC-BINH-LUAN =======================
 bl = wb.create_sheet("GOC-BINH-LUAN")
-cols = ["Thứ tự BL", "Giờ video", "Mã KH", "Tên Facebook", "Mã (BL)", "Món (BL)", "Size", "SL", "Đơn giá BL (VNĐ)",
+cols = ["STT dòng (theo giờ BL)", "Giờ video", "Mã KH", "Tên Facebook", "Mã (BL)", "Món (BL)", "Size", "SL", "Đơn giá BL (VNĐ)",
         "Nhóm (bản cũ)", "Ghi chú bản cũ", "Bình luận gốc", "ID bình luận",
         "Mã sổ", "Món sổ", "Vị trí dòng tồn", "Tồn sổ", "Cộng dồn theo giờ", "Giá sổ (VNĐ)",
-        "Thành tiền BL (VNĐ)", "Kết luận tồn", "Kiểm giá", "Trong ĐƠN OK?", "Việc cần làm"]
-header(bl, 1, cols, [7, 9, 7, 20, 7, 16, 8, 5, 11, 12, 26, 40, 18, 7, 14, 7, 7, 8, 11, 12, 20, 8, 9, 30])
+        "Thành tiền BL (VNĐ)", "Kết luận tồn", "Kiểm giá", "Trong ĐƠN OK?", "Việc cần làm",
+        "Vào danh sách chờ (1/0)", "STT danh sách chờ"]
+header(bl, 1, cols, [7, 9, 7, 20, 7, 16, 8, 5, 11, 12, 26, 40, 18, 7, 14, 7, 7, 8, 11, 12, 20, 8, 9, 30, 8, 8])
 for i, l in enumerate(LINES, start=2):
     c = CUST.get(l["c"], {})
     note = " · ".join(x for x in [l["st"] if l["st"] != "Rõ ràng" else "", l["no"]] if x)
-    vals = [l["o"], tsec(l["t"]), l["c"], c.get("n"), l["m"], l["i"], l["s"], l["q"], l["p"], GROUP[l["g"]],
+    vals = [i - 1, tsec(l["t"]), l["c"], c.get("n"), l["m"], l["i"], l["s"], l["q"], l["p"], GROUP[l["g"]],
             note or None, l["tx"], l["fb"]]
     for j, v in enumerate(vals, 1):
         bl.cell(row=i, column=j, value=v)
@@ -241,21 +245,21 @@ for i, l in enumerate(LINES, start=2):
     bl.cell(row=r, column=24, value=(f"=IF(U{r}=\"HUỶ\",\"—\",IF(U{r}=\"TRONG TỒN\",IF(J{r}=\"Hỏi lại khách\",\"Hỏi lại size/món rồi chốt\",\"Có hàng: chốt được\"),"
                                      f"IF(U{r}=\"VƯỢT TỒN\",\"Hết size: mời đổi size / đặt chờ\",IF(U{r}=\"THIẾU SIZE\",\"Hỏi size rồi tra tồn\",IF(U{r}=\"SIZE KHÔNG CÓ TRONG SỔ\",\"Báo không có size, gợi ý size gần\","
                                      f"IF(U{r}=\"MÓN CHƯA CÓ TRONG SỔ\",\"Tra sổ giấy / KiotViet\",\"Xác định mã hàng\"))))))"))
+    bl.cell(row=r, column=25, value=f"=IF(OR(U{r}=\"VƯỢT TỒN\",U{r}=\"SIZE KHÔNG CÓ TRONG SỔ\"),1,0)")
+    bl.cell(row=r, column=26, value=f"=IF(Y{r}=1,SUM($Y$2:Y{r}),\"\")")
 N_BL = len(LINES) + 1
-style_body(bl, 2, N_BL, 1, 24, calc_cols=range(14, 25), input_cols=range(1, 14),
+style_body(bl, 2, N_BL, 1, 26, calc_cols=range(14, 27), input_cols=range(1, 14),
            fmt={2: TIME, 9: MONEY, 19: MONEY, 20: MONEY})
 for r in range(2, N_BL + 1):
     bl.cell(row=r, column=12).alignment = Alignment(vertical="top", wrap_text=False)
 bl.freeze_panes = "E2"
-bl.auto_filter.ref = f"A1:X{N_BL}"
+bl.auto_filter.ref = f"A1:Z{N_BL}"
 bl["R1"].comment = Comment("Cộng dồn SL của cùng dòng tồn, theo thứ tự bình luận (sớm trước). "
                            "Giả định: shop xếp hàng theo giờ bình luận (B12 §4.4). Kiểm mẫu 23 tên đầu tab M10: 14/23 trùng nhóm đặt sớm nhất → dùng như ước lượng.", "NV4-B12")
 bl["U1"].comment = Comment("TRONG TỒN: cộng dồn ≤ tồn sổ · VƯỢT TỒN: đặt sau khi size đã đủ người · "
                            "THIẾU SIZE: khách chưa nói size · SIZE KHÔNG CÓ: mã-món có trong sổ nhưng size này không có · MÓN CHƯA CÓ: sổ không ghi món này "
                            "(vd quần M01 'viết giấy') · MÃ KHÔNG CÓ: mã '?' hoặc hàng không có tab.", "NV4-B12")
 
-for rng, fill in ((f'U2:U{N_BL}', None),):
-    pass
 bl.conditional_formatting.add(f"U2:U{N_BL}", FormulaRule(formula=[f'U2="VƯỢT TỒN"'], fill=fill_red))
 bl.conditional_formatting.add(f"U2:U{N_BL}", FormulaRule(formula=[f'U2="TRONG TỒN"'], fill=fill_green))
 bl.conditional_formatting.add(f"V2:V{N_BL}", FormulaRule(formula=[f'V2="LỆCH"'], fill=fill_red))
@@ -327,7 +331,6 @@ STATUS = [("CHƯA LÊN ĐƠN – CÓ HÀNG", "Tra KiotViet theo tên → không 
           ("KHÔNG CÓ DÒNG ĐẶT", "—", 4)]
 
 # thứ tự dòng: tính trạng thái giống công thức để sắp xếp
-res = {}
 cum = Counter()
 key2row = {}
 for i, t in enumerate(TON):
@@ -337,10 +340,14 @@ for i, t in enumerate(TON):
 stock = [int(t["sl_a"]) + int(t["sl_b"]) for t in TON]
 remap = {(a, b): (c, d) for a, b, c, d, *_ in QD}
 agg = Counter()
-for l in LINES:
-    if l["g"] == 3:
-        continue
+tracked_mm = {(t["ma_m"], t["mon"]) for t in TON}
+tracked_m = {t["ma_m"] for t in TON}
+LST = {}  # chỉ số dòng -> (trạng thái, mã sổ, món sổ) — bản sao logic cột U; một bình luận có thể sinh nhiều dòng cùng "o"
+for idx, l in enumerate(LINES):
     m, it = remap.get((l["m"], l["i"]), (l["m"], l["i"]))
+    if l["g"] == 3:
+        LST[idx] = ("HUỶ", m, it)
+        continue
     k = key2row.get((m, it, l["s"]))
     v = (l["p"] or 0) * l["q"]
     a = agg.setdefault(l["c"], Counter())
@@ -348,11 +355,21 @@ for l in LINES:
     if k is None:
         a["unk"] += v
         a["unk_n"] += 1
+        if (l["s"] or "").startswith("?"):
+            st = "THIẾU SIZE"
+        elif (m, it) in tracked_mm:
+            st = "SIZE KHÔNG CÓ TRONG SỔ"
+        elif m in tracked_m:
+            st = "MÓN CHƯA CÓ TRONG SỔ"
+        else:
+            st = "MÃ KHÔNG CÓ TRONG SỔ"
     else:
         cum[k] += l["q"]
         tag = "in" if cum[k] <= stock[k] else "over"
         a[tag] += v
         a[tag + "_n"] += 1
+        st = "TRONG TỒN" if tag == "in" else "VƯỢT TỒN"
+    LST[idx] = (st, m, it)
 
 
 def status_py(cid, name, src):
@@ -443,9 +460,10 @@ mm["A2"] = ("Đọc: '% bán' = số đặt nằm trong tồn ÷ tồn sổ. 'Ho
             "(đo độ đông người xem). Mã lên lúc vắng khách thì % bán thấp chưa nói lên mẫu xấu.")
 mm["A2"].font = f_note
 cols = ["Mã", "Món", "Giờ lên live", "Hoạt động lúc lên (dòng/30')", "Tồn sổ", "Cầu bình luận", "Bán được (ước)", "% bán",
-        "Số size vượt", "Số size 0 đơn", "Khách xin size không có", "Giá trị đặt BL (VNĐ)", "Đề xuất", "Nhận xét NV4 (26/09, tĩnh)"]
+        "Số size vượt", "Số size 0 đơn", "Khách xin size không có", "Giá trị đặt BL (VNĐ)", "Đề xuất", "Nhận xét NV4 (26/09, tĩnh)",
+        "Phụ: khoá xếp hạng", "Phụ: STT 0 đơn", "Phụ: 0 đơn? (1/0)"]
 HR = 4
-header(mm, HR, cols, [7, 22, 9, 11, 8, 9, 9, 8, 8, 8, 10, 13, 30, 60])
+header(mm, HR, cols, [7, 22, 9, 11, 8, 9, 9, 8, 8, 8, 10, 13, 30, 60, 9, 9, 9])
 at = {}
 for r in D["matrix"]:
     if r["at"] and (r["m"], r["i"]) not in at:
@@ -495,10 +513,13 @@ for n, (m, it) in enumerate(all_items):
                                      f"IF(H{r}>='TOM-TAT'!$C$6,\"GIỮ – bán tiếp\",IF(AND(D{r}<>\"\",D{r}<'TOM-TAT'!$C$9),\"CHƯA KẾT LUẬN – lên lại đầu buổi\","
                                      f"IF(AND(H{r}<'TOM-TAT'!$C$7,E{r}>='TOM-TAT'!$C$8),\"KHÔNG NHẬP THÊM – đổi cách bán\",\"THEO DÕI\")))))"))
     mm.cell(row=r, column=14, value=NOTES.get((m, it)))
+    mm.cell(row=r, column=15, value=f"=F{r}+ROW()/100000")
+    mm.cell(row=r, column=17, value=f"=IF(AND(E{r}<>\"\",F{r}=0),1,0)")
+    mm.cell(row=r, column=16, value=f"=IF(Q{r}=1,SUM($Q${r0}:Q{r}),\"\")")
     if NOTES.get((m, it)):
         mm.row_dimensions[r].height = 40
 rN = r0 + len(all_items) - 1
-style_body(mm, r0, rN, 1, 14, calc_cols=range(4, 14), input_cols=(1, 2, 3), fmt={3: TIME, 8: PCT, 12: MONEY})
+style_body(mm, r0, rN, 1, 17, calc_cols=list(range(4, 14)) + [15, 16, 17], input_cols=(1, 2, 3), fmt={3: TIME, 8: PCT, 12: MONEY})
 for r in range(r0, rN + 1):
     mm.cell(row=r, column=14).alignment = wrap
     mm.cell(row=r, column=14).font = f_base
@@ -563,7 +584,7 @@ LOI = [
      "Ghi trong MAU-MA (cả hai 'CẦN SỐ TỒN')", "Số tồn T6K01SD019908 từ KiotViet"),
     ("Món không có thật: M16 'Áo nâu', M26 'Quần 590'; M28 'Quần' đúng ra là chân váy kaki",
      "Tab M16 = set kẻ xanh (chỉ áo); M26 = áo khoác jean; M28 = áo nhung + chân váy kaki",
-     "Tin nhắn gửi khách gọi sai tên món", "Ghi nhận; không có dòng đặt nào cho M16 áo nâu / M26 quần", "Sửa tên M28 trong mẫu tin"),
+     "Tin nhắn gửi khách gọi sai tên món", "QUY-DOI-MA: M28 'Quần' → 'Chân váy kaki'; M16 áo nâu / M26 quần không có dòng đặt", "—"),
     ("Size không tồn tại vẫn niêm là 'có': Boot M03 size 28, Giày M05 size 29, Chân váy M10 size 1-2y",
      "Sổ M03 không có cột 28; M05 không có 29; bảng giá M10 chân váy 'từ 2-4y'",
      "Nhận đơn size không có", "Dòng đặt size không có → 'SIZE KHÔNG CÓ TRONG SỔ'", "—"),
@@ -577,8 +598,9 @@ LOI = [
     ("Áo mèo chấm bi (10 cái, không mã) không có chỗ trong sổ",
      "Sổ không có tab nào cho áo chấm bi",
      "10 đơn dễ rơi", "Nhóm 'MÃ KHÔNG CÓ TRONG SỔ'", "Hỏi ai giữ danh sách áo chấm bi"),
-    ("Trang dài, 4 tab, không có cột 'kết quả' để ghi lại",
-     "—", "Không đo được đã xử lý bao nhiêu", "KHACH có 4 cột nhập (kết quả, mã KiotViet, người, ghi chú)", "—"),
+    ("Trang dài, không có cột 'kết quả'; tin nhắn báo 'đang kiểm hàng' cho cả món chắc chắn còn, gọi sai món (M13, M15, M28)",
+     "Sổ có tồn từng size; tab mã cho tên món đúng", "Không đo được đã xử lý bao nhiêu; khách nhận tin sai món",
+     "KHACH có 4 cột nhập; TIN-NHAN soạn lại theo tồn sổ và tên món đã sửa, tự báo khi trạng thái đổi", "Quản lý duyệt trước khi gửi"),
     ("Giá: KHÔNG sai", "0 dòng lệch giữa giá bản cũ và giá sổ trên các mã-món sổ có ghi", "—", "Cột 'Kiểm giá' giữ để kiểm các buổi sau", "—"),
 ]
 for k, row in enumerate(LOI, start=1):
@@ -669,7 +691,7 @@ tt["C13"].font = f_input
 a0 = 13 + len(KPI) + 1
 tt.cell(row=a0, column=2, value="VIỆC LÀM NGAY (theo thứ tự)").font = f_h2
 ACT = [
-    (f"=\"1. Dò \"&C25&\" khách có hàng nhưng chưa ở ĐƠN OK (\"&SUBSTITUTE(TEXT(D25,\"#,##0\"),\",\",\".\")&\"đ): KHACH, lọc Ưu tiên = 1\"",
+    (f"=\"1. Dò \"&C25&\" khách có hàng nhưng chưa ở ĐƠN OK (\"&SUBSTITUTE(TEXT(D25,\"#,##0\"),\",\",\".\")&\"đ): KHACH lọc Ưu tiên = 1; tin nhắn soạn sẵn ở TIN-NHAN\"",
      "B5 + người trực inbox · hạn 28/09"),
     (f"=\"2. Mở KiotViet \"&C26&\" khách đã lên đơn mà có dòng vượt tồn — xem size đó có bị bán quá sổ\"", "B10 + B16 · 28/09"),
     ("3. Chép sổ giấy quần M01 + số tồn chân váy/áo giữ nhiệt M10, chân váy M08/M14 vào GOC-SO-TON → file tự tính lại",
@@ -710,8 +732,11 @@ header(dt, 11, ["Sheet", "Dùng để", "Cột chính · kiểu"])
 SHEETS = [
     ("TOM-TAT", "1 trang: tham số, số chính, 5 việc", "Ô vàng = tham số sửa được; ô xanh nhạt = công thức"),
     ("KHACH", "Mỗi khách 1 dòng + việc cần làm", "Trạng thái/Việc/Ưu tiên tự tính · P–S là ô nhập (kết quả, mã đơn KiotViet — dạng chữ)"),
+    ("TIN-NHAN", "Tin nhắn soạn sẵn cho từng khách cần xử lý (bản nháp, chờ duyệt)", "Cột E báo 'ĐỔI – soạn lại' nếu trạng thái đã thay đổi"),
+    ("DANH-SACH-CHO", "Mẫu B12 §8.4: khách không mua được (hết size / size không có)", "Tự cập nhật; kết quả nhập ở KHACH cột P"),
     ("TON-SIZE", "Mỗi size của mỗi mã 1 dòng: tồn ↔ cầu", "Tình trạng: VƯỢT n / SẮP HẾT / CÒN n / 0 ĐƠN · dòng tổng dùng SUBTOTAL"),
     ("MAU-MA", "Quyết định mẫu: nhập thêm / giữ / dừng", "% bán = bán được ÷ tồn · Hoạt động lúc lên = độ đông người xem"),
+    ("BAO-CAO-LIVE", "Mẫu B12 §8.3: báo cáo sau live, 12 mục", "Ô xanh nhạt = công thức; chữ xanh dương = số/nhận định nhập tay có ghi nguồn"),
     ("LOI-BAN-CU", "Bản cũ sai gì, đã sửa gì", "12 dòng"),
     ("GOC-BINH-LUAN", "1.020 dòng đặt từ bình luận (gốc A–M) + cột tính N–X", "Giờ = [h]:mm:ss · tiền = số · ID bình luận = chữ"),
     ("GOC-SO-TON", "Tồn + giá chép từ 29 tab mã của sổ", "Mỗi cột size của sổ 1 dòng; cột sổ gộp 2 size (vd M01 110 = 1-2 và 2-4) có 2 'size khách gọi'"),
@@ -747,14 +772,246 @@ for k, v in enumerate(QS, start=1):
     dt.cell(row=q0 + k, column=1, value=v).font = f_base
 dt.freeze_panes = "A10"
 
+
+# ======================= TIN-NHAN (B12 §8.2, bản nháp) =======================
+def vnd(x):
+    return f"{x:,}".replace(",", ".") + "đ"
+
+
+lines_by = {}
+for idx, l in enumerate(LINES):
+    lines_by.setdefault(l["c"], []).append((idx, l))
+dup_names = {n for n, k in Counter(c["n"] for c in D["custs"]).items() if k > 1}
+
+
+def label_py(cid, name, src):
+    if src != "Bình luận":
+        return "CÓ ĐƠN – KHÔNG CÓ TRONG BÌNH LUẬN"
+    a = agg.get(cid, Counter())
+    if a["n"] == 0:
+        return "KHÔNG CÓ DÒNG ĐẶT"
+    if name in ok_clean:
+        return "ĐÃ LÊN ĐƠN – CÓ DÒNG VƯỢT TỒN" if a["over_n"] else "ĐÃ LÊN ĐƠN"
+    if a["in_n"]:
+        return "CHƯA LÊN ĐƠN – CÓ HÀNG"
+    if a["n"] - a["over_n"] > 0:
+        return "CHƯA LÊN ĐƠN – CHƯA KIỂM ĐƯỢC TỒN"
+    return "CHƯA LÊN ĐƠN – HẾT SIZE"
+
+
+def item_line(l, m, it):
+    size = l["s"] if l["s"] and not l["s"].startswith("?") else "chưa rõ size"
+    q = f" – SL {l['q']}" if l["q"] > 1 else ""
+    price = f" – {vnd(l['p'] * l['q'])}" if l["p"] else ""
+    return f"• {m} {it} – size {size}{q}{price}"
+
+
+def quote(t, n=80):
+    t = " ".join((t or "").split())
+    return t if len(t) <= n else t[: n - 1] + "…"
+
+
+def draft(cid, name, label):
+    ls = [(l, *LST[idx]) for idx, l in lines_by.get(cid, []) if LST[idx][0] != "HUỶ"]
+    grp = {k: [] for k in ("ok", "ask", "over", "nosize", "nooffer", "unk")}
+    for l, st, m, it in ls:
+        if st == "TRONG TỒN":
+            grp["ask" if l["g"] == 2 else "ok"].append((l, m, it))
+        elif st == "VƯỢT TỒN":
+            grp["over"].append((l, m, it))
+        elif st == "THIẾU SIZE":
+            grp["nosize"].append((l, m, it))
+        elif st == "SIZE KHÔNG CÓ TRONG SỔ":
+            grp["nooffer"].append((l, m, it))
+        else:
+            grp["ask" if l["g"] == 2 else "unk"].append((l, m, it))
+    out = [f"Dạ em chào chị {name} ạ 🌸", "Em là Trukuky."]
+    sorry = "Em xin lỗi chị ạ. Chị muốn đổi sang size khác, hay để em báo chị khi có hàng về ạ?"
+    if label == "ĐÃ LÊN ĐƠN – CÓ DÒNG VƯỢT TỒN":
+        out.append("Em rà lại đơn live 17/09 của chị thì thấy món dưới đây đã hết size trước lượt đặt của chị ạ:")
+        out += [item_line(*x) for x in grp["over"]]
+        out.append(sorry)
+    elif label == "CHƯA LÊN ĐƠN – HẾT SIZE":
+        out.append("Em rà lại đơn live 17/09 thì các món chị đặt đã hết size trước lượt của chị ạ:")
+        out += [item_line(*x) for x in grp["over"] + grp["nooffer"]]
+        out.append(sorry)
+    else:
+        out.append("Em rà lại đơn buổi live 17/09 thì chưa thấy đơn của chị trên hệ thống, em nhắn để không bỏ sót đơn của chị ạ.")
+        if grp["ok"]:
+            out += ["", "Các món chị đặt:"] + [item_line(*x) for x in grp["ok"]]
+        if grp["ask"]:
+            out += ["", "Chị xác nhận giúp em mấy chỗ này ạ:"]
+            by_cmt = {}
+            for l, m, it in grp["ask"]:
+                size = l["s"] if l["s"] and not l["s"].startswith("?") else "chưa rõ size"
+                q = f" x{l['q']}" if l["q"] > 1 else ""
+                by_cmt.setdefault(quote(l["tx"]), []).append(f"{m} {it} size {size}{q}")
+            for tx, its in by_cmt.items():
+                out.append(f"• Chị ghi “{tx}” — em hiểu là: {'; '.join(its)}. Chị xem đúng chưa ạ?")
+        if grp["nosize"]:
+            out += ["", "Chị cho em xin size của:"] + [f"• {m} {it}" for _, m, it in grp["nosize"]]
+        if grp["nooffer"]:
+            out += ["", "Size này shop không có, chị đổi size khác không ạ:"] + [item_line(*x) for x in grp["nooffer"]]
+        if grp["over"]:
+            out += ["", "Size chị chọn ở các món này đã hết trước lượt đặt của chị, chị đổi size khác không ạ:"] + [item_line(*x) for x in grp["over"]]
+        if grp["unk"]:
+            out += ["", "Các món em đang kiểm lại hàng, có kết quả em báo chị ngay ạ:"] + [item_line(*x) for x in grp["unk"]]
+        out += ["", "Chị còn lấy không ạ? Nếu chị đã chốt với bạn khác bên em rồi thì chị báo giúp em để em đối chiếu nhé. Em cảm ơn chị!"]
+    checks = ["1) Tra KiotViet theo tên: đã có đơn → KHÔNG gửi, ghi mã đơn vào KHACH cột Q."]
+    if label == "ĐÃ LÊN ĐƠN – CÓ DÒNG VƯỢT TỒN":
+        checks = ["1) CHỈ GỬI nếu đơn KiotViet của khách KHÔNG có món/size này."]
+    if grp["over"]:
+        checks.append("2) 'Hết size' là ước lượng theo giờ bình luận — đối chiếu tên trong tab mã của sổ.")
+    if name in dup_names:
+        checks.append("3) Tên trùng nhiều tài khoản — nhắn qua đường dẫn bình luận (ID) để đúng người.")
+    return "\n".join(out), "\n".join(checks)
+
+
+tn = wb.create_sheet("TIN-NHAN")
+tn["A1"] = "Tin nhắn soạn sẵn — BẢN NHÁP, chờ Quản lý duyệt trước khi gửi (00 §4 việc 1: gửi từ 2 khách trở lên)"
+tn["A1"].font = f_title
+tn["A2"] = ("Không hứa ngày giao (B12 §6). Chính sách đổi trả phải nói trước khi khách chuyển tiền (B14 §4.1) — mục này chờ Quản lý điền. "
+            "Cột E báo 'ĐỔI – soạn lại' khi trạng thái hiện tại khác lúc soạn (ví dụ sau khi sửa tồn hoặc tham số).")
+tn["A2"].font = f_note
+header(tn, 4, ["Mã KH", "Tên Facebook", "Trạng thái lúc soạn (26/09)", "Trạng thái hiện tại", "Còn đúng?",
+               "Tin nhắn soạn sẵn", "Kiểm trước khi gửi", "ID bình luận đầu", "Kết quả (từ KHACH)"],
+       [8, 20, 24, 24, 12, 70, 40, 18, 16])
+SEND = ("CHƯA LÊN ĐƠN – CÓ HÀNG", "ĐÃ LÊN ĐƠN – CÓ DÒNG VƯỢT TỒN", "CHƯA LÊN ĐƠN – CHƯA KIỂM ĐƯỢC TỒN", "CHƯA LÊN ĐƠN – HẾT SIZE")
+r = 4
+for cid, name, src, _ in rows:
+    lab = label_py(cid, name, src)
+    if lab not in SEND:
+        continue
+    r += 1
+    text, checks = draft(cid, name, lab)
+    first = min((l for _, l in lines_by.get(cid, [])), key=lambda x: x["o"])
+    tn.cell(row=r, column=1, value=cid)
+    tn.cell(row=r, column=2, value=name)
+    tn.cell(row=r, column=3, value=lab)
+    tn.cell(row=r, column=4, value=f"=IFERROR(INDEX({khc('M')},MATCH(A{r},{khc('A')},0)),\"\")")
+    tn.cell(row=r, column=5, value=f"=IF(D{r}=C{r},\"ĐÚNG\",\"ĐỔI – soạn lại\")")
+    tn.cell(row=r, column=6, value=text)
+    tn.cell(row=r, column=7, value=checks)
+    tn.cell(row=r, column=8, value=first["fb"]).number_format = "@"
+    tn.cell(row=r, column=9, value=f"=IFERROR(INDEX({khc('P')},MATCH(A{r},{khc('A')},0))&\"\",\"\")")
+    tn.row_dimensions[r].height = min(400, 13.5 * (text.count("\n") + 2))
+N_TN = r
+style_body(tn, 5, N_TN, 1, 9, calc_cols=(4, 5, 9))
+for rr in range(5, N_TN + 1):
+    for c in (6, 7):
+        tn.cell(row=rr, column=c).alignment = wrap
+tn.freeze_panes = "C5"
+tn.auto_filter.ref = f"A4:I{N_TN}"
+tn.conditional_formatting.add(f"E5:E{N_TN}", FormulaRule(formula=['E5<>"ĐÚNG"'], fill=fill_red))
+
+# ======================= DANH-SACH-CHO (B12 §8.4) =======================
+dc = wb.create_sheet("DANH-SACH-CHO")
+dc["A1"] = "Danh sách chờ sau live 17/09 (mẫu B12 §8.4) — tự cập nhật từ GOC-BINH-LUAN"
+dc["A1"].font = f_title
+dc["A2"] = ("Gồm dòng 'VƯỢT TỒN' và 'SIZE KHÔNG CÓ TRONG SỔ'. Không có SĐT (khách live chỉ có tài khoản Facebook) — liên hệ qua ID bình luận. "
+            "Kết quả nhập ở KHACH cột P (mỗi khách một chỗ nhập), cột K ở đây tự lấy về.")
+dc["A2"].font = f_note
+header(dc, 4, ["STT", "Mã KH", "Khách", "Mã", "Món", "Size", "SL", "Lý do không mua được", "Giờ bình luận", "ID bình luận",
+               "Kết quả (từ KHACH)", "Mã đơn KiotViet (từ KHACH)"], [5, 8, 20, 6, 16, 8, 5, 44, 9, 18, 18, 16])
+MAXW = 150
+for k in range(1, MAXW + 1):
+    r = 4 + k
+    mt = f"MATCH($A{r},{blc('Z')},0)"
+    dc.cell(row=r, column=1, value=f"=IF({k}<=MAX({blc('Z')}),{k},\"\")")
+    for c, col in ((2, "C"), (3, "D"), (4, "N"), (5, "O"), (6, "G"), (7, "H"), (9, "B"), (10, "M")):
+        dc.cell(row=r, column=c, value=f"=IF($A{r}=\"\",\"\",INDEX({blc(col)},{mt}))")
+    dc.cell(row=r, column=8, value=(f"=IF($A{r}=\"\",\"\",IF(INDEX({blc('U')},{mt})=\"VƯỢT TỒN\","
+                                    f"\"Hết size trước lượt đặt: tồn \"&INDEX({blc('Q')},{mt})&\", khách đặt tới chiếc thứ \"&INDEX({blc('R')},{mt}),"
+                                    f"\"Size không có trong sổ\"))"))
+    dc.cell(row=r, column=11, value=f"=IF($B{r}=\"\",\"\",IFERROR(INDEX({khc('P')},MATCH($B{r},{khc('A')},0))&\"\",\"\"))")
+    dc.cell(row=r, column=12, value=f"=IF($B{r}=\"\",\"\",IFERROR(INDEX({khc('Q')},MATCH($B{r},{khc('A')},0))&\"\",\"\"))")
+style_body(dc, 5, 4 + MAXW, 1, 12, calc_cols=range(1, 13), fmt={9: TIME})
+for rr in range(5, 5 + MAXW):
+    dc.cell(row=rr, column=10).number_format = "@"
+dc.freeze_panes = "D5"
+dc.auto_filter.ref = f"A4:L{4 + MAXW}"
+
+# ======================= BAO-CAO-LIVE (B12 §8.3) =======================
+bc = wb.create_sheet("BAO-CAO-LIVE")
+bc.column_dimensions["A"].width = 5
+bc.column_dimensions["B"].width = 36
+bc.column_dimensions["C"].width = 46
+bc.column_dimensions["D"].width = 62
+bc["A1"] = "BÁO CÁO LIVE — 2026-09-17 — 12:03 → ≈17:07 (mẫu B12 §8.3)"
+bc["A1"].font = f_title
+SRC = [("Nguồn dữ liệu", "Phiếu bình luận (bản cũ) · sổ 'Live 17/9' (ĐƠN OK + SL/giá 29 tab) · bảng giá 'CHECK GIÁ … / LIVE 17/9'"),
+       ("Khoảng thời gian", "2026-09-17 12:03:52 → ≈17:07 (bình luận muộn tới 2026-09-20)"),
+       ("Trích xuất lúc", "2026-09-26"),
+       ("Cỡ mẫu", "=COUNTA({0})&\" dòng đặt · \"&'TOM-TAT'!C21&\" khách\"".format(blc("A"))),
+       ("Đã đối soát với", "Sổ live (tồn theo size, giá, ĐƠN OK). CHƯA đối soát KiotViet và sao kê (B5)."),
+       ("Người lập", "NV4-B12 (agent)")]
+for k, (a, b) in enumerate(SRC, start=3):
+    bc.cell(row=k, column=2, value=a).font = f_bold
+    bc.cell(row=k, column=3, value=b).font = f_base
+header(bc, 10, ["#", "Mục (theo §8.3)", "Giá trị", "Cách tính / nguồn · ghi chú"])
+
+
+def top_item(k):
+    rng = lambda c: f"'MAU-MA'!${c}${r0}:${c}${rN}"
+    mt = f"MATCH(LARGE({rng('O')},{k}),{rng('O')},0)"
+    return f"=INDEX({rng('A')},{mt})&\" \"&INDEX({rng('B')},{mt})&\" — \"&INDEX({rng('F')},{mt})&\" chiếc đặt\""
+
+
+def zero_item(k):
+    rng = lambda c: f"'MAU-MA'!${c}${r0}:${c}${rN}"
+    mt = f"MATCH({k},{rng('P')},0)"
+    return f"=IFERROR(INDEX({rng('A')},{mt})&\" \"&INDEX({rng('B')},{mt})&\" (lên lúc \"&TEXT(INDEX({rng('C')},{mt}),\"h:mm\")&\")\",\"—\")"
+
+
+ITEMS = [
+    ("1", "Người xem cao nhất / trung bình", "CHƯA CÓ SỐ", "Lấy từ Facebook Live Insights. (524K là lượt xem, không phải người xem đồng thời — số của NV B12 bản 5.)"),
+    ("2", "Số mẫu lên live", "30 mã (M01–M30) + 1 món không mã (áo mèo chấm bi)", "Bình luận niêm yết của shop (bản cũ)"),
+    ("3", "Số comment đặt hàng", 1343, "Bình luận xếp loại 'đặt / nhắc lại đơn' (bản cũ); gồm cả bình luận lặp lại"),
+    ("4", "Số dòng phiếu đơn live", f"=COUNTA({blc('A')})", "Phép so 4 ≥ 3 không đo được sót khi gần nửa dòng là bình luận lặp (N25) → xem dòng 4b"),
+    ("4b", "Chỉ số sót theo luật 24 giờ (thay 3↔4)", "='TOM-TAT'!C25&\" khách có hàng nhưng sau 24 giờ vẫn chưa ở ĐƠN OK\"", "Đề xuất F11 của B12: dòng giữ hàng quá 24 giờ phải có mã đơn KiotViet hoặc bị huỷ có lý do"),
+    ("5", "Số đơn chốt được", "='TOM-TAT'!C22&\" tên trong ĐƠN OK\"", "Đếm tên, không phải đơn; có thể gồm đơn huỷ (đánh dấu bằng màu, chưa đọc được)"),
+    ("6", "Tỷ lệ chốt", "='TOM-TAT'!C23/'TOM-TAT'!C21", "Sửa đơn vị (C② của B12): khách bình luận có trong ĐƠN OK ÷ khách bình luận có dòng đặt"),
+    ("7", "Doanh thu dự kiến / đã thu", "=\"Giá trị đặt \"&SUBSTITUTE(TEXT('TOM-TAT'!D14,\"#,##0\"),\",\",\".\")&\"đ · đã thu: CHƯA CÓ\"", "Giá trị đặt từ bình luận, không phải doanh thu (F12: báo cáo live không ghi doanh thu; B5/B11 báo sau đối soát)"),
+    ("8a", "Mẫu đặt nhiều nhất #1", top_item(1), "Theo số chiếc đặt từ bình luận (MAU-MA)"),
+    ("8b", "Mẫu đặt nhiều nhất #2", top_item(2), ""),
+    ("8c", "Mẫu đặt nhiều nhất #3", top_item(3), ""),
+    ("9a", "Mẫu hô mà không ai đặt #1", zero_item(1), "Mã-món có tồn trong sổ nhưng 0 dòng đặt"),
+    ("9b", "Mẫu hô mà không ai đặt #2", zero_item(2), ""),
+    ("9c", "Mẫu hô mà không ai đặt #3", zero_item(3), ""),
+    ("10", "Sự cố trong live",
+     "Áo mẹ M01 size S đủ 22 người lúc 0:11:10 nhưng ≈0:27:30 mới báo hết trên sóng → 30 người đặt thêm vào chỗ không còn hàng",
+     "Vi phạm B12 §4.2/§5.4 (size hết phải báo ngay). Thêm: thiếu 68 bình luận so với bộ đếm Facebook (2.028/2.096); lời 'kháng khuẩn' ≈4:17:58 cần người nghe lại (N17)"),
+    ("11", "Bán quá tồn", "=IF('TOM-TAT'!C19>0,\"CÓ — \"&'TOM-TAT'!C19&\" size, \"&'TOM-TAT'!C16&\" dòng đặt vượt\",\"KHÔNG\")", "Chi tiết: TON-SIZE (lọc VƯỢT) và DANH-SACH-CHO"),
+    ("12a", "Bài học 1", "Có người canh tồn theo size trong live: size về 0 → báo ngay trên sóng và gạch khỏi danh sách",
+     "Một ô size M01 S đã sinh 30 dòng vượt = 63% tổng dòng vượt của buổi"),
+    ("12b", "Bài học 2", "Mã tồn lớn phải lên trong 2 giờ đầu; sổ phải ghi đủ mọi món trong set (kể cả quần M01, chân váy, áo giữ nhiệt)",
+     "Sau 3:15 chỉ còn < 40 dòng đặt/30 phút (đầu buổi ≈ 300); ≈48% giá trị đặt không đối soát được vì sổ không ghi món"),
+]
+for k, (no, lab, val, note) in enumerate(ITEMS, start=11):
+    bc.cell(row=k, column=1, value=no)
+    bc.cell(row=k, column=2, value=lab)
+    bc.cell(row=k, column=3, value=val)
+    bc.cell(row=k, column=4, value=note or None)
+    for c in range(1, 5):
+        cell = bc.cell(row=k, column=c)
+        cell.border, cell.alignment = box, wrap
+        cell.font = f_note if c == 4 else f_base
+    if isinstance(val, str) and val.startswith("="):
+        bc.cell(row=k, column=3).fill = fill_calc
+    elif not isinstance(val, str) or val != "CHƯA CÓ SỐ":
+        bc.cell(row=k, column=3).font = f_input
+    bc.row_dimensions[k].height = 30
+bc["C17"].number_format = PCT
+
 # thứ tự sheet
-order = ["DOC-TRUOC", "TOM-TAT", "KHACH", "TON-SIZE", "MAU-MA", "LOI-BAN-CU", "GOC-BINH-LUAN", "GOC-SO-TON", "GOC-DON-OK", "QUY-DOI-MA"]
+order = ["DOC-TRUOC", "TOM-TAT", "KHACH", "TIN-NHAN", "DANH-SACH-CHO", "TON-SIZE", "MAU-MA", "BAO-CAO-LIVE", "LOI-BAN-CU",
+         "GOC-BINH-LUAN", "GOC-SO-TON", "GOC-DON-OK", "QUY-DOI-MA"]
 wb._sheets = [wb[n] for n in order]
 for ws in wb.worksheets:
     ws.sheet_view.zoomScale = 100
 wb["DOC-TRUOC"].sheet_properties.tabColor = "2F6B54"
 wb["TOM-TAT"].sheet_properties.tabColor = "2F6B54"
-for n in ("KHACH", "TON-SIZE", "MAU-MA"):
+for n in ("KHACH", "TIN-NHAN", "DANH-SACH-CHO", "TON-SIZE", "MAU-MA", "BAO-CAO-LIVE"):
     wb[n].sheet_properties.tabColor = "A75A16"
 for n in ("GOC-BINH-LUAN", "GOC-SO-TON", "GOC-DON-OK", "QUY-DOI-MA"):
     wb[n].sheet_properties.tabColor = "808080"
