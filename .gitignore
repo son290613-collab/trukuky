@@ -5,3 +5,6 @@
 .DS_Store
 *.log
 node_modules/
+/tools/live/*.txt
+/tools/live/*.xlsx
+/tools/live/*.csv
