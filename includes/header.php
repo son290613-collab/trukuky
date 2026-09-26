@@ -24,6 +24,7 @@ $user = current_user();
       <a href="dashboard.php" class="nav-item <?= $activeNav === 'dashboard' ? 'active' : '' ?>">Tổng quan</a>
       <a href="orders.php" class="nav-item <?= $activeNav === 'orders' ? 'active' : '' ?>">Đơn hàng</a>
       <a href="inventory.php" class="nav-item <?= $activeNav === 'inventory' ? 'active' : '' ?>">Tồn kho</a>
+      <a href="codemap.php" class="nav-item <?= $activeNav === 'codemap' ? 'active' : '' ?>">Sổ mã hàng</a>
       <a href="outfits.php" class="nav-item <?= $activeNav === 'outfits' ? 'active' : '' ?>">Phối đồ</a>
       <a href="reports.php" class="nav-item <?= $activeNav === 'reports' ? 'active' : '' ?>">Báo cáo</a>
       <a href="team.php" class="nav-item <?= $activeNav === 'team' ? 'active' : '' ?>">Nhân viên &amp; Lịch</a>
@@ -40,4 +41,4 @@ $user = current_user();
       <a href="logout.php" class="logout-link">Đăng xuất</a>
     </div>
   </aside>
-  <main class="content">
+  <main class="content content-<?= preg_replace('/[^a-z]/', '', (string) ($activeNav ?? '')) ?>">

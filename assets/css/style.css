@@ -316,3 +316,44 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent-soft
   .form-grid { grid-template-columns: 1fr; }
   .public-header { padding: 16px 20px; }
 }
+
+/* Sổ mã hàng (codemap.php) */
+.cm-alert {
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  border: 1px solid var(--border);
+}
+.cm-alert-bad { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+.cm-alert-warn { background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
+.cm-alert ul { margin: 8px 0; padding-left: 20px; }
+.cm-alert code { background: rgba(255,255,255,.55); padding: 1px 6px; border-radius: 5px; font-size: 12.5px; }
+
+.cm-progress-line { margin-bottom: 10px; font-size: 14px; }
+.cm-progress-line .check-meta { display: block; margin-top: 3px; }
+.cm-progress-track { background: var(--bg); border-radius: 4px; width: 100%; overflow: hidden; }
+.cm-progress-bar { height: 8px; background: var(--accent); border-radius: 4px; transition: width .2s ease; }
+
+.cm-field { width: 100%; min-width: 120px; font-size: 13px; padding: 7px 9px; }
+.cm-field:disabled { opacity: .5; }
+.cm-actions { white-space: nowrap; }
+.cm-actions .btn { margin-left: 8px; }
+.cm-bad { color: var(--bad); }
+.cm-row-shared > td { background: var(--bad-soft); }
+
+/* .content là flex item nên mặc định min-width:auto — không co được dưới bề
+   rộng nội dung, làm cả trang bị phóng nhỏ trên điện thoại. Mở khoá riêng cho
+   trang này để bảng cuộn ngang trong thẻ thay vì kéo giãn cả trang.
+   (Các trang bảng khác vẫn còn hiện tượng này — xem ghi chú trong README.) */
+.content-codemap { min-width: 0; }
+
+/* Bảng 7 cột: cho cuộn ngang trong thẻ, để khối cảnh báo phía trên
+   không bị kéo tràn theo và vẫn đọc được trên điện thoại. */
+.cm-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.cm-table-wrap table { min-width: 880px; }
+
+@media (max-width: 900px) {
+  .cm-field { min-width: 110px; }
+}
