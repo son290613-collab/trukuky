@@ -7,11 +7,15 @@ Chạy:
 Cần mạng tới docs.google.com và *.googleusercontent.com. Không cần đăng nhập.
 Thứ tự thử cho mỗi tab: export CSV theo gid (giữ nguyên ô) → gviz CSV theo gid (headers=0).
 File ra có dữ liệu khách — không commit, không chia sẻ công khai.
+
+Mã thoát: 0 = đủ mọi tab; 1 = thiếu một phần (tab/sổ lỗi ghi trong JSON và stderr);
+2 = không lấy được tab nào — khi đó không ghi file, file cũ (nếu có) giữ nguyên.
 """
 import argparse
 import csv
 import io
 import json
+import os
 import re
 import sys
 import time
@@ -20,6 +24,27 @@ import urllib.request
 
 UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140 Safari/537.36"
 BASE = "https://docs.google.com/spreadsheets/d/{id}"
+HOSTS = "docs.google.com và *.googleusercontent.com"
+
+
+def permanent(e):
+    """Lỗi mà thử lại cũng không hết: proxy chặn tên miền, Google từ chối quyền, sai ID."""
+    if isinstance(e, urllib.error.HTTPError):
+        return e.code in (401, 403, 404)
+    return "Tunnel connection failed: 403" in str(e)
+
+
+def tip(e):
+    """Dòng gợi ý cách sửa, in ngay dưới dòng LỖI."""
+    if "Tunnel connection failed: 403" in str(e):
+        return (f"\n    → Proxy của môi trường chặn Google Sheets. Thêm {HOSTS} vào Allowed domains"
+                " (cài đặt môi trường → Network access) rồi chạy lại;"
+                " hoặc tải tay tab ĐƠN OK dạng CSV (Tệp → Tải xuống → CSV).")
+    if isinstance(e, urllib.error.HTTPError) and e.code in (401, 403):
+        return "\n    → Google từ chối: chủ sổ cần bật quyền xem 'Bất kỳ ai có đường liên kết'."
+    if isinstance(e, urllib.error.HTTPError) and e.code == 404:
+        return "\n    → Không có sổ này: kiểm tra lại ID trong đường link."
+    return ""
 
 
 def get(url, tries=3):
@@ -30,8 +55,11 @@ def get(url, tries=3):
             with urllib.request.urlopen(req, timeout=90) as r:
                 return r.read(), r.geturl()
         except (urllib.error.URLError, TimeoutError) as e:
+            if permanent(e):
+                raise
             last = e
-            time.sleep(2 ** (k + 1))
+            if k < tries - 1:
+                time.sleep(2 ** (k + 1))
     raise last
 
 
@@ -58,6 +86,10 @@ def list_sheets(sid):
         if g not in seen:
             seen.add(g)
             out.append({"name": n, "gid": g})
+    if not out:
+        # Trang đăng nhập hoặc Google đổi giao diện: coi là lỗi, không báo "0 tab" như thể đã xong.
+        raise RuntimeError("không đọc được danh sách tab — sổ chưa bật 'Bất kỳ ai có đường liên kết'"
+                           " hoặc trang htmlview đã đổi cấu trúc")
     return title, out
 
 
@@ -85,19 +117,25 @@ def main():
     ap.add_argument("--check", action="store_true")
     a = ap.parse_args()
     if a.check:
+        failed = 0
         for sid in a.ids:
             try:
                 title, tabs = list_sheets(sid)
                 print(f"OK  {sid}: '{title}', {len(tabs)} tab")
-                if tabs:
-                    m, rows = fetch_tab(sid, tabs[0]["gid"])
-                    print(f"    tab đầu '{tabs[0]['name']}' qua {m}: {len(rows)} dòng")
+                m, rows = fetch_tab(sid, tabs[0]["gid"])
+                print(f"    tab đầu '{tabs[0]['name']}' qua {m}: {len(rows)} dòng")
             except Exception as e:  # noqa: BLE001
-                print(f"LỖI {sid}: {e}")
-        return
+                failed += 1
+                print(f"LỖI {sid}: {e}{tip(e)}")
+        return 1 if failed else 0
     result = {"fetched_at": time.strftime("%Y-%m-%d %H:%M:%S %z"), "spreadsheets": []}
     for sid in a.ids:
-        title, tabs = list_sheets(sid)
+        try:
+            title, tabs = list_sheets(sid)
+        except Exception as e:  # noqa: BLE001 — một sổ lỗi không làm mất các sổ còn lại
+            result["spreadsheets"].append({"id": sid, "title": sid, "error": str(e), "sheets": []})
+            print(f"{sid}: LỖI {e}{tip(e)}", file=sys.stderr)
+            continue
         book = {"id": sid, "title": title, "sheets": []}
         for t in tabs:
             try:
@@ -106,13 +144,21 @@ def main():
                 print(f"{title} / {t['name']}: {len(rows)} dòng ({m})", file=sys.stderr)
             except Exception as e:  # noqa: BLE001
                 book["sheets"].append({**t, "error": str(e), "rows": []})
-                print(f"{title} / {t['name']}: LỖI {e}", file=sys.stderr)
+                print(f"{title} / {t['name']}: LỖI {e}{tip(e)}", file=sys.stderr)
         result["spreadsheets"].append(book)
-    json.dump(result, open(a.out, "w", encoding="utf8"), ensure_ascii=False)
     n = sum(len(s["sheets"]) for s in result["spreadsheets"])
     bad = sum(1 for b in result["spreadsheets"] for s in b["sheets"] if s.get("error"))
-    print(f"Xong: {n} tab, {bad} lỗi → {a.out}")
+    lost = sum(1 for b in result["spreadsheets"] if b.get("error"))
+    if n == bad:
+        print(f"Không lấy được tab nào — không ghi {a.out} (file cũ nếu có vẫn giữ nguyên).")
+        return 2
+    tmp = a.out + ".tmp"
+    with open(tmp, "w", encoding="utf8") as f:
+        json.dump(result, f, ensure_ascii=False)
+    os.replace(tmp, a.out)  # ghi xong mới thay, bị ngắt giữa chừng cũng không hỏng file cũ
+    print(f"Xong: {n} tab, {bad} lỗi" + (f", {lost} sổ không đọc được" if lost else "") + f" → {a.out}")
+    return 1 if bad or lost else 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
