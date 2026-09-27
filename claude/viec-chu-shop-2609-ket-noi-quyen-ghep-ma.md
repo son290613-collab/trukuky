@@ -129,11 +129,17 @@ Sáu lần, hai buổi live, mô tả **giống hệt nhau từng chữ**: "4-6y
 | LIVE 17/9 | M06 (chân váy nâu), M14 (chân váy) |
 | LIVE 8-9/9 | M12, M13, M25, M29 |
 
-**Kết luận:** đây là mã dán tạm cho "chân váy" nói chung, không phải một mặt hàng. Căn cứ: sổ live gọi nó bằng sáu tên mã khác nhau trong hai buổi cách nhau 8 ngày, mà dòng mô tả không đổi một chữ. Một chiếc váy thật không có sáu tên.
+> **ĐÍNH CHÍNH 27/09.** Kết luận đầu tiên của tôi ("mã dán tạm, không phải một mặt hàng") là **sai**. Sau khi đọc trực tiếp 28 tab của sổ Live 17/9, bằng chứng chỉ theo hướng ngược lại. Phần dưới là kết luận đã sửa.
 
-**Hệ quả:** tồn của mã này trên KiotViet không dùng được cho bất kỳ mã live nào. Riêng ngày 17/9 có 33 chiếc đặt (M06 9 + M14 24) cùng trừ vào một kho.
+**Kết luận đúng:** `T6K01SD019908` **là một mặt hàng thật** — chân váy nâu của M06 — và nó được bán lại trong nhiều lượt lên sóng khác nhau. Mã KiotViet không sai; cái sai là **sổ live đặt mã theo lượt lên sóng, không theo sản phẩm**.
 
-**Mức chắc chắn:** cao ở chỗ mã bị dùng lại. Chưa chắc ở chỗ có phải cùng một chiếc váy hay không — phải nhìn ảnh mới biết.
+**Bằng chứng quyết định:** tab M14 của sổ Live 17/9 **không có khối tồn nào cho chân váy** — nó chỉ có một khối "áo 590-690". Dòng cuối tab ghi thẳng: `MIX CÙNG CHÂN VÁY M06`. Nghĩa là 24 chiếc chân váy khách đặt dưới M14 vốn dĩ phải rút từ tồn của M06.
+
+Sổ còn 7 dòng "MIX CÙNG" khác cùng kiểu: M02→M01, M08→M06, M13→M10, M16→M06, M19→M18, M26→M20, M28→M01.
+
+**Hệ quả (đã tính lại):** tồn chân váy M06 là 47 chiếc trên 7 cột size. Đặt 33 chiếc (M06 9 + M14 24) → **không vượt tổng, còn 14 chiếc**. Nhưng phải kiểm từng size, vì hai mã live dùng hai dải size khác nhau. Cảnh báo "bán vượt kho" ở mức tổng là **không đúng**; rủi ro thật nằm ở từng ô size.
+
+**Mức chắc chắn:** cao. Dựa trên ghi chú do chính người trực sổ viết, không phải suy luận từ hình thức dữ liệu.
 
 ### 5.2 `C6K02TT019901` hai giá — xác nhận
 
@@ -202,7 +208,7 @@ Nối KiotViet để có số bán thật, kiểm lại quyền 3 sổ, và ki�
 | Thiếu gì | Ảnh hưởng |
 |---|---|
 | Kết nối và khoá KiotViet | Không món nào kết luận được "Khớp" hay "Lệch". Toàn bộ phân loại trong bảng 45 món là **mức sẵn sàng**, không phải kết quả đối chiếu. |
-| Nội dung 28 tab mã của sổ Live 17/9 | Chưa chạy đối soát (đúng quy định của prompt: chờ việc 2 và 4). |
+| ~~Nội dung 28 tab mã của sổ Live 17/9~~ | **Đã đọc 27/09** — xem mục 7. Đối soát vẫn chờ KiotViet. |
 | Ảnh sản phẩm | Không phân biệt được chân váy M06 và M14 có phải một mẫu không. |
 
 Ba giả định tôi đang dùng, và phải được xác nhận:
@@ -294,3 +300,109 @@ Ba mức này trông giống nhau khi nhìn bảng giá — đều là một dò
 1. **Quần da beo M01 — 150 chiếc, món nhiều nhất buổi — đã lên đơn KiotViet chưa, và dưới mã nào?** Nếu chưa có mã thật thì 150 chiếc này chưa từng vào hệ thống, và đó là việc gấp hơn mọi thứ khác trong bản này.
 2. **`T6K01SD019908` là một chiếc chân váy hay sáu chiếc khác nhau?** Câu trả lời quyết định 33 chiếc đặt ngày 17/9 có đang trừ nhầm kho hay không, và quyết định cách sửa (tách mã hay giữ nguyên).
 3. **Khi mở trang ghép mã, dòng trạng thái ở góc ghi gì?** Nó phân biệt "chưa ai làm" với "đã làm mà không lưu lên được" — hai tình huống cần hai cách xử lý khác hẳn nhau.
+
+## 7. Đọc sổ Live 17/9 (27/09) — quy trình làm việc thật
+
+Đọc toàn bộ 28 tab mã và tab ĐƠN OK qua connector Drive. **Chỉ đọc, không sửa gì.** Sổ vẫn đang được chỉnh — lần sửa gần nhất 27/09 lúc 08:29, tức 10 ngày sau buổi live.
+
+Không có tên khách nào được chép vào tài liệu này.
+
+### 7.1 Cấu trúc một tab mã
+
+```
+MÃ     | <mã live> | <ký hiệu người phụ trách>
+GIÁ    | <người>
+<ghi chú tự do>
+<giá thấp>,<giá cao>
+SL     | n1 | n2 | n3 | ...        ← tồn đầu buổi, mỗi số một cột size
+<tên món> <giá> | <size 1> | <size 2> | ...
+<tên khách> | <tên khách> | ...     ← mỗi cột một size, mỗi ô một người đặt
+```
+
+**Mỗi cột là một size. Mỗi ô có tên là một chiếc đã đặt.** Đếm số ô trong cột rồi so với dòng SL là ra còn hay hết. Không có công thức nào — đếm bằng mắt.
+
+Một tab có thể chứa **nhiều khối món**: M10 có 3 khối (áo ghi lê, áo giữ nhiệt, chân váy), M06 có 3, M11 có 3.
+
+### 7.2 Con số thật của buổi live
+
+| | |
+|---|---|
+| Khối món có dòng SL | **42** trên 30 mã live |
+| Tổng tồn đầu buổi | **2.490 chiếc** |
+
+**File CSV mà quy trình B12 đang dùng chỉ có 28 dòng và 1.791 chiếc** — thiếu **699 chiếc, 28% hàng của buổi live**. Nguyên nhân: người chép tay chỉ lấy **khối món đầu tiên của mỗi tab**.
+
+| Mã | Các khối trong sổ | Chép tay lấy | Bỏ sót |
+|---|---|---|---|
+| M01 | áo 160 · quần da beo 139 | 160 | **139** |
+| M10 | ghi lê 83 · giữ nhiệt 56 · chân váy 112 | 83 | **168** |
+| M08 | áo 216 · chân váy 129 | 216 | **129** |
+| M11 | váy 24 · áo 6 · tất ren 114 | 24 | **120** |
+| M06 | ghi lê 156 · sơ mi 31 · chân váy 47 | 156 | **78** |
+| M16 | áo 19 · chân váy 19 | 19 | 19 |
+| M28 | áo 48 · chân váy 18 | 48 | 18 |
+| M17 | áo 32 · quần 7 | 32 | 7 |
+| M18 | áo gió 47 · khoác hồng 1 | 47 | 1 |
+
+Quần da beo M01 — món 150 chiếc đặt — **có tồn 139 chiếc ghi rõ trong sổ**, nhưng không có trong file chép tay. Mọi phân tích dựa trên file đó đều thiếu món này.
+
+### 7.3 Mã live là lượt lên sóng, không phải sản phẩm
+
+Sổ có 8 dòng ghi quan hệ chéo:
+
+| Tab | Ghi chú trong sổ |
+|---|---|
+| M02 | MIX CÙNG ÁO M01 |
+| M08 | LÊN LẠI MIX ÁO CÙNG CHÂN VÁY NÂU M06 |
+| M13 | MIX CÙNG CHÂN VÁY M10 |
+| M14 | MIX CÙNG CHÂN VÁY M06 |
+| M16 | MIX CÙNG ÁO GHI LÊ M06 |
+| M19 | Mix cùng áo hồng M18 |
+| M26 | MIX CÙNG QUẦN M20 |
+| M28 | MIX CÙNG QUẦN DA BEO M01 |
+
+Đây là chìa khoá của cả bài toán ghép mã: **một sản phẩm xuất hiện trong nhiều set, mỗi set một mã live.** Bảng giá gán mã KiotViet theo **sản phẩm**; sổ live gán theo **lượt lên sóng**. Hai hệ đếm khác nhau, nên không bao giờ khớp 1–1.
+
+Vì vậy quan hệ đúng là **nhiều mã live → một mã KiotViet**, chứ không phải một–một. Sổ mã hàng phải cho phép điều đó, và cảnh báo "hai món dùng chung một mã" chỉ nên bật khi hai món **không** có dòng MIX nối nhau.
+
+### 7.4 Những chỗ dữ liệu tự mâu thuẫn
+
+**Cột size nhiều hơn số tồn** — 2 chỗ:
+
+| Món | Số tồn | Số cột size | Cột gộp |
+|---|---|---|---|
+| M01 áo | 7 | 8 | "110 1-2" và "2-4" chung một số |
+| M08 áo | 8 | 9 | "120 6-8 (hoặc 4-6)" |
+
+**Cột size mơ hồ** — M14 có cột ghi `160 S hoặc M`; M15 có cột `160 XS & S`. Hai size trong một ô tồn thì không biết hết size nào.
+
+**Size thiếu trong dãy** — M03 không có 28, M05 không có 29, M28 chân váy nhảy từ 120 sang 140 (thiếu 130 8-10).
+
+**Tồn ghi dạng `a+b`** — `6+2`, `27+1 đổi`, `5+1`, `7 (CÒN VỀ THÊM)`. Phần "+b" là hàng về thêm hoặc hàng đổi về, nhưng không có cột riêng nên máy không phân biệt được với tồn gốc.
+
+**M16 áo và chân váy có dòng SL giống hệt nhau** (`1,1,2,3,8,4`). Có thể đúng, cũng có thể là chép đè. Cần kiểm.
+
+### 7.5 Một ô chứa quá nhiều thứ
+
+Ô tên khách đang gánh đồng thời: tên · số lượng (`x2`) · size thật khi khác cột · trạng thái tiền (`đợi ck`, `đợi cọc`, `ck`) · trạng thái chờ (`đợi rep`) · nguồn đơn (`page`) · khuyến mãi (`KM`) · thao tác (`đổi`, `đổi về`, `đổi sz`, `huỷ`, `lấy thêm`, `phụ`).
+
+Không có cột riêng cho bất kỳ thứ nào. Hệ quả: muốn biết "bao nhiêu đơn đang đợi chuyển khoản" thì phải đọc tay từng ô của 42 khối món.
+
+`phụ` xuất hiện rải rác — nhiều khả năng là khách đặt khi đã hết hàng, tức **danh sách chờ đang nằm lẫn trong sổ tồn** chứ không có chỗ riêng.
+
+### 7.6 Tab ĐƠN OK
+
+15 cột, chia theo chữ cái đầu của tên: `AB`, `C D Đ`, `M`, `L`, `P`, `Q`, `V`, `N`, `N 3-4chữ`, `T`, `T 3-4chữ`, `H`, `H 3-4 CHỮ`, `GKEFJI`, `SXWOURY`. Dòng đầu có 4 nhãn: ĐƠN GẤP, QUA LẤY, ĐƠN HỦY, KHÁCH HP.
+
+Đây là **bảng tra tay "khách này đã lên đơn chưa"**. Ba chữ cái N, T, H bị tách đôi theo độ dài tên — tra nhầm cột là mất dấu khách. Và vì khớp bằng tên Facebook nên hai người trùng tên không phân biệt được; sổ tồn có những tên lặp lại nhiều lần ở nhiều cột mà không biết là một người mua nhiều hay nhiều người.
+
+### 7.7 Rủi ro nghiêm trọng: sổ đang mở công khai
+
+Sổ này để chế độ "bất kỳ ai có link đều xem được" (mục 3). Bên trong, ngoài tên khách, còn có ghi chú nội bộ nằm ngay cạnh tên:
+
+- `thiếu 2 ng, giả vờ thất lạc`
+- `con này cút, đơn VH cầm`
+- `hiệp sĩ lợn huỷ`
+- `chốt page thì nhận lố lên 2c đi, form rộng lắm mấy con này có 4 mấy cân k vừa đâu`
+
+Câu đầu tiên mô tả một cách xử lý thiếu hàng. Nếu một khách hàng, một đối thủ hoặc một nhà báo mở link này, thiệt hại uy tín lớn hơn nhiều so với việc lộ danh sách tên. **Đây là lý do đổi quyền sổ phải làm trong hôm nay, không chờ gì cả.**
