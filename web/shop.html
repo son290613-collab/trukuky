@@ -261,7 +261,7 @@ button,input,select,textarea{font:inherit; color:inherit}
 <section class="hero" id="top">
   <div class="wrap">
     <h1>Hàng live <i>còn sẵn</i> tại Trukuky, xem giá và size ngay</h1>
-    <p>Toàn bộ mã hàng, giá từng size và số lượng còn lại — lấy từ sổ live ngày 17/09. Chọn size, thêm vào giỏ và gửi đơn, shop xác nhận lại qua Zalo trước khi gửi hàng.</p>
+    <p>Toàn bộ mã hàng, giá từng size và số lượng còn lại — lấy từ sổ live ngày 17/09. Chọn size, tạo đơn rồi gửi qua Zalo hoặc gọi điện — shop kiểm tra còn đúng size và xác nhận trước khi gửi hàng.</p>
     <div class="stats">
       <div class="stat"><b class="num" id="sMa">0</b><span>mã hàng đang bán</span></div>
       <div class="stat"><b class="num" id="sTon">0</b><span>sản phẩm còn trong kho</span></div>
@@ -371,7 +371,6 @@ function art(p, seed){
 let cat = 'all', onlySale = false, onlyDuo = false, sizeF = '', sortBy = 'code', query = '';
 let cart = [];
 let myOrders = [];
-let dbReady = null;
 
 try { cart = JSON.parse(localStorage.getItem('tk_cart') || '[]') || []; } catch(e) { cart = []; }
 try { myOrders = JSON.parse(localStorage.getItem('tk_orders') || '[]') || []; } catch(e) { myOrders = []; }
@@ -597,6 +596,16 @@ document.addEventListener('click', e=>{
   if (inc!=null){ const l=cart[+inc]; l.qty=Math.min(l.max||99,l.qty+1); save(); paintCart(); return renderCart(); }
   if (dec!=null){ const l=cart[+dec]; l.qty=Math.max(1,l.qty-1); save(); paintCart(); return renderCart(); }
   if (del!=null){ cart.splice(+del,1); save(); paintCart(); return renderCart(); }
+  const rc = e.target.dataset?.recopy;
+  if (rc){
+    const o = myOrders.find(x=>x.code===rc); if(!o) return;
+    const b = e.target;
+    navigator.clipboard.writeText(orderText(o)).then(
+      ()=>{ b.textContent='Đã sao chép'; setTimeout(()=>b.textContent='Sao chép lại đơn',2000); },
+      ()=>{ b.textContent='Máy không cho sao chép'; }
+    );
+    return;
+  }
   if (e.target.id==='toCheckout') return openCheckout();
   if (e.target.id==='openCart') return openCart();
   if (e.target.id==='openOrders') return openOrders();
@@ -626,7 +635,7 @@ function openCheckout(){
     </div>
     <div class="actions">
       <button class="btn btn-2 btn-sm" id="backCart">Quay lại</button>
-      <button class="btn" id="submitOrder">Gửi đơn · ${vnd(cartTotal())}</button>
+      <button class="btn" id="submitOrder">Tạo đơn · ${vnd(cartTotal())}</button>
     </div>
   </div>`);
 }
@@ -657,7 +666,7 @@ function orderText(o){
   ].filter(Boolean).join('\n');
 }
 
-async function submitOrder(){
+function submitOrder(){
   const name = $('#cName').value.trim();
   const phone = $('#cPhone').value.trim();
   const address = $('#cAddr').value.trim();
@@ -679,50 +688,39 @@ async function submitOrder(){
     total: cartTotal(), createdAt: d.toISOString(), status: 'moi',
   };
 
-  const btn = $('#submitOrder');
-  btn.disabled = true; btn.textContent = 'Đang gửi…';
-
-  let sent = false;
-  try {
-    const db = await dbReady;
-    if (db){ await db.doc('orders/'+code).set(order); sent = true; }
-  } catch(e){ sent = false; }
-
-  myOrders.unshift({...order, sent});
+  myOrders.unshift(order);
   cart = []; save(); paintCart();
-  showDone(order, sent);
+  showDone(order);
 }
 
-function showDone(o, sent){
+function showDone(o){
   const txt = orderText(o);
   openLayer(`<div class="sheet" role="dialog" aria-modal="true" aria-label="Đơn hàng đã tạo">
-    <div class="sheet-hd"><h2>${sent?'Shop đã nhận đơn':'Đơn đã tạo, cần gửi cho shop'}</h2><button class="x" data-close aria-label="Đóng">✕</button></div>
+    <div class="sheet-hd"><h2>Còn một bước nữa</h2><button class="x" data-close aria-label="Đóng">✕</button></div>
     <div class="sheet-bd">
       <div class="done-code"><b>${o.code}</b><span>Mã đơn của bạn · ${vnd(o.total)}</span></div>
-      ${sent
-        ? `<div class="state ok"><b>Đơn đã gửi tới shop.</b>Shop gọi lại số <span class="num">${esc(o.phone)}</span> trong giờ làm việc để xác nhận size, địa chỉ và phí giao hàng.</div>`
-        : `<div class="state warn"><b>Đơn chưa gửi được tự động.</b>Sao chép nội dung bên dưới rồi gửi qua Zalo, hoặc gọi số <span class="num">0225 2666 669</span>. Đơn vẫn được lưu trên máy bạn ở mục “Đơn đã đặt”.</div>`}
-      <div class="lbl">Nội dung đơn</div>
+      <div class="state warn"><b>Đơn chưa tới shop. Hãy gửi nội dung bên dưới.</b>Trang này chưa tự gửi đơn về shop được. Bấm <b>Sao chép đơn</b> rồi dán vào Zalo, hoặc gọi <span class="num">0225 2666 669</span> và đọc mã đơn. Đơn được lưu trên máy bạn ở mục “Đơn đã đặt”.</div>
+      <div class="lbl">Nội dung đơn · gửi nguyên phần này cho shop</div>
       <div class="copybox" id="ordTxt">${esc(txt)}</div>
-      <div class="frow2" style="margin-top:12px">
-        <button class="btn btn-2 btn-sm" id="copyOrd">Sao chép nội dung đơn</button>
-        <a class="chip-link" href="https://zalo.me/842252666669" target="_blank" rel="noopener">Mở Zalo của shop</a>
+      <div class="actions" style="position:static;border:0;padding:12px 0 0">
+        <button class="btn" id="copyOrd">Sao chép đơn</button>
+        <a class="btn btn-2" style="text-align:center;text-decoration:none" href="https://zalo.me/842252666669" target="_blank" rel="noopener">Mở Zalo của shop</a>
       </div>
       <div class="guide" style="margin-top:16px">
-        <b>Tiếp theo là gì</b>
+        <b>Sau khi bạn gửi đơn</b>
         <ul>
-          <li>Shop kiểm tra còn đúng size rồi gọi xác nhận.</li>
+          <li>Shop kiểm tra còn đúng size rồi gọi lại số <span class="num">${esc(o.phone)}</span> để xác nhận.</li>
           <li>Phí giao hàng báo khi gọi, chưa tính trong tổng ở trên.</li>
-          <li>${o.pay==='ck'?'Shop gửi số tài khoản khi gọi xác nhận, chưa cần chuyển tiền lúc này.':'Trả tiền cho người giao hàng khi nhận.'}</li>
+          <li>${o.pay==='ck'?'Shop gửi số tài khoản khi gọi xác nhận — chưa cần chuyển tiền lúc này.':'Trả tiền cho người giao hàng khi nhận.'}</li>
           <li>Cần đổi size hoặc huỷ đơn, gọi <span class="num">0225 2666 669</span> kèm mã <b>${o.code}</b>.</li>
         </ul>
       </div>
     </div>
-    <div class="actions"><button class="btn" data-close>Xong</button></div>
+    <div class="actions"><button class="btn btn-2" data-close>Đóng</button></div>
   </div>`);
   const cb = $('#copyOrd');
   cb.addEventListener('click', async ()=>{
-    try { await navigator.clipboard.writeText(txt); cb.textContent = 'Đã sao chép'; setTimeout(()=>cb.textContent='Sao chép nội dung đơn',1800); }
+    try { await navigator.clipboard.writeText(txt); cb.textContent = 'Đã sao chép, dán vào Zalo'; setTimeout(()=>cb.textContent='Sao chép đơn',2400); }
     catch(e){
       const r = document.createRange(); r.selectNodeContents($('#ordTxt'));
       const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
@@ -739,8 +737,8 @@ function openOrders(){
       myOrders.length ? `<p class="pd-desc">Lưu trên máy này. Mở bằng máy khác sẽ không thấy — gọi <span class="num">0225 2666 669</span> kèm mã đơn để tra cứu.</p>
       <div class="orders-list">${myOrders.map(o=>`
         <div class="ord">
-          <div class="ord-hd"><b>${o.code}</b><span class="num">${vnd(o.total)}</span></div>
-          <div style="font-size:12.5px;color:var(--muted)">${new Date(o.createdAt).toLocaleString('vi-VN')} · ${o.sent?'đã gửi shop':'chưa gửi shop'}</div>
+          <div class="ord-hd"><b>${o.code}</b><button class="link-del" data-recopy="${esc(o.code)}">Sao chép lại đơn</button></div>
+          <div style="font-size:12.5px;color:var(--muted)">${new Date(o.createdAt).toLocaleString('vi-VN')} · ${vnd(o.total)} · ${o.pay==='ck'?'chuyển khoản':'trả khi nhận'}</div>
           <ul>${o.items.map(l=>`<li>${esc(l.name)} · size ${esc(l.size)} · ${l.qty} cái</li>`).join('')}</ul>
         </div>`).join('')}</div>`
       : `<div class="empty">Chưa có đơn nào trên máy này.</div>`
@@ -766,5 +764,4 @@ $('#q').addEventListener('input', e=>{ query=e.target.value.trim().toLowerCase()
 
 /* ---------- boot ---------- */
 renderGrid(); paintCart();
-dbReady = (window.claude?.use ? window.claude.use('db').catch(()=>null) : Promise.resolve(null));
 </script>
