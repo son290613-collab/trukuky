@@ -1,0 +1,770 @@
+<title>Trukuky Mẹ &amp; Bé</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#FBF9F6; --surface:#FFFFFF; --surface-2:#F5F0E9;
+  --ink:#2A211B; --muted:#7B6A5C; --line:#E9E1D8;
+  --accent:#1F4B43; --accent-ink:#FFFFFF; --accent-soft:#E4EEEA;
+  --sale:#A63A2E; --sale-soft:#FBEAE6;
+  --art-1:#F3EDE4; --art-2:#E6DCCE; --shadow:0 1px 2px rgba(42,33,27,.06),0 8px 24px rgba(42,33,27,.06);
+  --ok:#2F6B4F;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#16120F; --surface:#201B17; --surface-2:#282118;
+    --ink:#F3ECE4; --muted:#A89684; --line:#362D25;
+    --accent:#5FAE9C; --accent-ink:#11221E; --accent-soft:#22332E;
+    --sale:#E68878; --sale-soft:#38241F;
+    --art-1:#2A231C; --art-2:#352C23; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+    --ok:#7BC49B;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#16120F; --surface:#201B17; --surface-2:#282118;
+  --ink:#F3ECE4; --muted:#A89684; --line:#362D25;
+  --accent:#5FAE9C; --accent-ink:#11221E; --accent-soft:#22332E;
+  --sale:#E68878; --sale-soft:#38241F;
+  --art-1:#2A231C; --art-2:#352C23; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  --ok:#7BC49B;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.disp{font-family:"Playfair Display",Georgia,serif; text-wrap:balance; margin:0}
+button,input,select,textarea{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:1140px; margin:0 auto; padding-inline:16px}
+
+/* ---------- header ---------- */
+.hdr{
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:40;
+  background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+}
+.hdr-in{display:flex; align-items:center; gap:12px; padding-block:10px}
+.logo{display:flex; align-items:center; gap:9px; text-decoration:none; color:inherit; flex:0 0 auto}
+.mark{
+  width:38px; height:38px; border-radius:11px; background:var(--accent); color:var(--accent-ink);
+  display:grid; place-items:center; font-family:"Playfair Display",serif; font-weight:700; font-size:16px; letter-spacing:.02em;
+}
+.logo b{font-family:"Playfair Display",serif; font-size:19px; font-weight:700; line-height:1.1; display:block}
+.logo span{font-size:11px; color:var(--muted); letter-spacing:.06em; text-transform:uppercase}
+.search{flex:1 1 auto; min-width:0; position:relative}
+.search input{
+  width:100%; padding:9px 12px 9px 34px; border:1px solid var(--line); border-radius:10px;
+  background:var(--surface); color:var(--ink);
+}
+.search svg{position:absolute; left:11px; top:50%; transform:translateY(-50%); color:var(--muted)}
+.cart-btn{
+  flex:0 0 auto; display:flex; align-items:center; gap:7px; padding:9px 14px; border-radius:10px;
+  border:1px solid var(--accent); background:var(--accent); color:var(--accent-ink); cursor:pointer; font-weight:600;
+}
+.cart-btn .cnt{
+  min-width:20px; height:20px; padding:0 5px; border-radius:10px; background:var(--accent-ink); color:var(--accent);
+  font-size:12px; font-weight:700; display:grid; place-items:center;
+}
+.cart-btn .lbl{display:none}
+@media(min-width:620px){.cart-btn .lbl{display:inline}}
+
+/* ---------- hero ---------- */
+.hero{padding-block:26px 20px; border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(28px,5.2vw,44px); line-height:1.1; max-width:22ch}
+.hero h1 i{font-style:italic; color:var(--accent)}
+.hero p{margin:12px 0 0; color:var(--muted); max-width:58ch}
+.stats{display:flex; flex-wrap:wrap; gap:10px; margin-top:18px}
+.stat{
+  flex:1 1 150px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:11px 13px;
+}
+.stat b{display:block; font-size:21px; font-family:"Playfair Display",serif; font-variant-numeric:tabular-nums}
+.stat span{font-size:12px; color:var(--muted)}
+.contact{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; align-items:center}
+.chip-link{
+  display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border-radius:999px;
+  border:1px solid var(--line); background:var(--surface); color:var(--ink); text-decoration:none; font-size:13px; font-weight:500;
+}
+.chip-link:hover{border-color:var(--accent); color:var(--accent)}
+.phone-txt{font-weight:600; letter-spacing:.02em}
+
+/* ---------- filters ---------- */
+.filters{padding-block:16px 6px; position:sticky; top:calc(env(safe-area-inset-top,0px) + 59px); z-index:30; background:var(--bg)}
+.frow{display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; scrollbar-width:thin}
+.chip{
+  flex:0 0 auto; padding:7px 13px; border-radius:999px; border:1px solid var(--line);
+  background:var(--surface); cursor:pointer; font-size:13px; font-weight:500; white-space:nowrap;
+}
+.chip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+.chip.sale[aria-pressed="true"]{background:var(--sale); border-color:var(--sale); color:#fff}
+.frow2{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:10px}
+.frow2 select{padding:7px 10px; border:1px solid var(--line); border-radius:9px; background:var(--surface)}
+.count{font-size:13px; color:var(--muted); margin-left:auto}
+
+/* ---------- grid ---------- */
+.grid{
+  display:grid; gap:14px; padding-block:14px 40px;
+  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+}
+.card{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden;
+  cursor:pointer; text-align:left; padding:0; display:flex; flex-direction:column; transition:border-color .15s,transform .15s;
+}
+.card:hover{border-color:var(--accent); transform:translateY(-2px)}
+.card .art{position:relative; aspect-ratio:1/1; max-width:100%; background:var(--art-1)}
+.card .art svg{width:100%; height:100%; display:block}
+.badges{position:absolute; top:9px; left:9px; display:flex; flex-direction:column; gap:5px; align-items:flex-start}
+.bd{padding:3px 8px; border-radius:999px; font-size:11px; font-weight:600; letter-spacing:.01em}
+.bd-sale{background:var(--sale); color:#fff}
+.bd-duo{background:var(--accent-soft); color:var(--accent); border:1px solid var(--accent)}
+.bd-low{background:var(--sale-soft); color:var(--sale)}
+.card .body{padding:11px 12px 13px; display:flex; flex-direction:column; gap:3px; flex:1}
+.code{font-size:11px; color:var(--muted); letter-spacing:.08em; font-weight:600}
+.card h3{font-size:16px; line-height:1.25}
+.price{font-weight:700; margin-top:4px; font-variant-numeric:tabular-nums}
+.price .from{font-size:11px; color:var(--muted); font-weight:500}
+.meta{font-size:12px; color:var(--muted); margin-top:auto; padding-top:6px}
+.empty{padding:44px 16px; text-align:center; color:var(--muted); border:1px dashed var(--line); border-radius:14px}
+
+/* ---------- overlay / panels ---------- */
+.ov{position:fixed; inset:0; z-index:60; background:rgba(20,15,11,.5); display:grid; place-items:end center}
+@media(min-width:700px){.ov{place-items:center}}
+.sheet{
+  background:var(--surface); width:100%; max-width:560px; max-height:92vh; overflow-y:auto;
+  border-radius:18px 18px 0 0; box-shadow:var(--shadow); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media(min-width:700px){.sheet{border-radius:16px; max-height:88vh}}
+.sheet-hd{
+  position:sticky; top:0; background:var(--surface); border-bottom:1px solid var(--line);
+  padding:14px 16px; display:flex; align-items:center; gap:10px; z-index:2;
+}
+.sheet-hd h2{font-size:19px; flex:1; line-height:1.2}
+.x{border:1px solid var(--line); background:var(--surface-2); width:32px; height:32px; border-radius:9px; cursor:pointer; flex:0 0 auto; font-size:16px; line-height:1}
+.sheet-bd{padding:16px}
+.drawer{max-width:430px; align-self:stretch; border-radius:18px 18px 0 0}
+@media(min-width:700px){
+  .ov.right{place-items:stretch flex-end}
+  .drawer{border-radius:0; max-height:100vh; height:100%}
+}
+
+/* ---------- product detail ---------- */
+.pd-art{aspect-ratio:16/10; max-width:100%; background:var(--art-1); border-radius:12px; overflow:hidden; margin-bottom:14px}
+.pd-art svg{width:100%; height:100%; display:block}
+.pd-desc{color:var(--muted); margin:0 0 14px}
+.lbl{font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:16px 0 8px}
+.sizes{display:grid; gap:7px; grid-template-columns:repeat(auto-fill,minmax(132px,1fr))}
+.size{
+  border:1px solid var(--line); background:var(--surface); border-radius:10px; padding:8px 10px; cursor:pointer;
+  text-align:left; display:flex; flex-direction:column; gap:1px;
+}
+.size[aria-pressed="true"]{border-color:var(--accent); background:var(--accent-soft)}
+.size:disabled{opacity:.45; cursor:not-allowed}
+.size b{font-size:14px}
+.size small{font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums}
+.guide{background:var(--surface-2); border-radius:12px; padding:12px 14px; margin-top:16px; font-size:13px}
+.guide b{display:block; margin-bottom:5px}
+.guide ul{margin:6px 0 0; padding-left:18px; color:var(--muted)}
+.qty{display:inline-flex; align-items:center; border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.qty button{width:36px; height:38px; border:0; background:var(--surface-2); cursor:pointer; font-size:17px}
+.qty span{min-width:42px; text-align:center; font-weight:600; font-variant-numeric:tabular-nums}
+.actions{
+  position:sticky; bottom:0; background:var(--surface); border-top:1px solid var(--line);
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px)); display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.btn{
+  padding:11px 18px; border-radius:11px; border:1px solid var(--accent); background:var(--accent); color:var(--accent-ink);
+  font-weight:600; cursor:pointer; flex:1 1 auto; min-width:140px;
+}
+.btn:disabled{opacity:.5; cursor:not-allowed}
+.btn-2{background:var(--surface); color:var(--ink); border-color:var(--line)}
+.btn-sm{padding:7px 12px; font-size:13px; min-width:0; flex:0 0 auto}
+
+/* ---------- cart ---------- */
+.ci{display:flex; gap:11px; padding:12px 0; border-bottom:1px solid var(--line)}
+.ci-art{width:60px; height:60px; border-radius:9px; background:var(--art-1); flex:0 0 auto; overflow:hidden}
+.ci-art svg{width:100%; height:100%; display:block}
+.ci-main{flex:1; min-width:0}
+.ci-main h4{margin:0; font-size:14px; font-weight:600}
+.ci-main p{margin:2px 0 6px; font-size:12px; color:var(--muted)}
+.ci-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.ci-price{font-weight:700; font-variant-numeric:tabular-nums; font-size:14px}
+.link-del{border:0; background:none; color:var(--sale); cursor:pointer; font-size:12px; padding:2px 0; text-decoration:underline}
+.tot{display:flex; justify-content:space-between; align-items:baseline; padding:14px 0 4px; font-size:15px}
+.tot b{font-size:22px; font-family:"Playfair Display",serif; font-variant-numeric:tabular-nums}
+.fld{margin-top:12px}
+.fld label{display:block; font-size:13px; font-weight:600; margin-bottom:5px}
+.fld input,.fld textarea,.fld select{
+  width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--ink);
+}
+.fld textarea{min-height:64px; resize:vertical}
+.fld .hint{font-size:12px; color:var(--muted); margin-top:4px}
+.err{color:var(--sale); font-size:13px; margin-top:8px}
+.pays{display:grid; gap:7px; grid-template-columns:1fr 1fr}
+.pay{border:1px solid var(--line); border-radius:10px; padding:9px 11px; cursor:pointer; background:var(--surface); text-align:left; font-size:13px}
+.pay[aria-pressed="true"]{border-color:var(--accent); background:var(--accent-soft)}
+
+/* ---------- done ---------- */
+.done-code{
+  background:var(--accent-soft); border:1px solid var(--accent); border-radius:12px; padding:14px; text-align:center; margin-bottom:14px;
+}
+.done-code b{display:block; font-family:"Playfair Display",serif; font-size:26px; letter-spacing:.03em; color:var(--accent)}
+.done-code span{font-size:12px; color:var(--muted)}
+.state{border-radius:11px; padding:11px 13px; font-size:13px; margin-bottom:12px; border:1px solid var(--line)}
+.state.ok{background:var(--accent-soft); border-color:var(--accent)}
+.state.warn{background:var(--sale-soft); border-color:var(--sale)}
+.state b{display:block; margin-bottom:3px}
+.copybox{
+  background:var(--surface-2); border:1px solid var(--line); border-radius:11px; padding:11px 13px;
+  font-size:12.5px; white-space:pre-wrap; word-break:break-word; max-height:220px; overflow-y:auto; line-height:1.5;
+}
+.orders-list{margin-top:4px}
+.ord{border:1px solid var(--line); border-radius:11px; padding:11px 13px; margin-bottom:9px; background:var(--surface)}
+.ord-hd{display:flex; justify-content:space-between; gap:8px; align-items:baseline; flex-wrap:wrap}
+.ord-hd b{font-size:14px; letter-spacing:.03em}
+.ord-hd .num{font-weight:700}
+.ord ul{margin:7px 0 0; padding-left:17px; font-size:12.5px; color:var(--muted)}
+
+/* ---------- footer ---------- */
+.ft{border-top:1px solid var(--line); padding-block:24px 34px; color:var(--muted); font-size:13px}
+.ft p{margin:0 0 6px}
+.ft b{color:var(--ink)}
+.toast{
+  position:fixed; left:50%; transform:translateX(-50%); bottom:calc(22px + env(safe-area-inset-bottom,0px));
+  background:var(--ink); color:var(--bg); padding:10px 18px; border-radius:999px; font-size:13px; font-weight:500; z-index:90;
+  box-shadow:var(--shadow);
+}
+@media(prefers-reduced-motion:no-preference){
+  .toast{animation:up .25s ease}
+  @keyframes up{from{opacity:0; transform:translate(-50%,10px)}}
+  .card{will-change:transform}
+}
+@media(prefers-reduced-motion:reduce){.card:hover{transform:none}}
+</style>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="logo" href="#top">
+      <span class="mark">TK</span>
+      <span><b>Trukuky</b><span>Mẹ &amp; bé</span></span>
+    </a>
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" type="search" placeholder="Tìm váy, áo, set, boot…" autocomplete="off">
+    </div>
+    <button class="cart-btn" id="openCart"><span class="lbl">Giỏ hàng</span><span class="cnt num" id="cartCnt">0</span></button>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <h1>Hàng live <i>còn sẵn</i> tại Trukuky, xem giá và size ngay</h1>
+    <p>Toàn bộ mã hàng, giá từng size và số lượng còn lại — lấy từ sổ live ngày 17/09. Chọn size, thêm vào giỏ và gửi đơn, shop xác nhận lại qua Zalo trước khi gửi hàng.</p>
+    <div class="stats">
+      <div class="stat"><b class="num" id="sMa">0</b><span>mã hàng đang bán</span></div>
+      <div class="stat"><b class="num" id="sTon">0</b><span>sản phẩm còn trong kho</span></div>
+      <div class="stat"><b class="num" id="sDuo">0</b><span>mã có cả size mẹ và bé</span></div>
+      <div class="stat"><b class="num" id="sSale">0</b><span>mã đang giảm giá</span></div>
+    </div>
+    <div class="contact">
+      <span class="chip-link">Gọi đặt hàng: <span class="phone-txt num">0225 2666 669</span></span>
+      <a class="chip-link" href="https://zalo.me/842252666669" target="_blank" rel="noopener">Chat Zalo</a>
+      <a class="chip-link" href="https://www.facebook.com/trukuky?locale=vi_VN" target="_blank" rel="noopener">Facebook</a>
+      <button class="chip-link" id="openOrders" type="button">Đơn đã đặt</button>
+    </div>
+  </div>
+</section>
+
+<div class="filters">
+  <div class="wrap">
+    <div class="frow" id="cats"></div>
+    <div class="frow2">
+      <select id="sizeFilter" aria-label="Lọc theo size">
+        <option value="">Mọi size</option>
+      </select>
+      <select id="sort" aria-label="Sắp xếp">
+        <option value="code">Theo mã hàng</option>
+        <option value="low">Giá thấp → cao</option>
+        <option value="high">Giá cao → thấp</option>
+        <option value="stock">Còn nhiều nhất</option>
+      </select>
+      <span class="count" id="count"></span>
+    </div>
+  </div>
+</div>
+
+<main class="wrap"><div class="grid" id="grid"></div></main>
+
+<footer class="ft">
+  <div class="wrap">
+    <p><b>Trukuky — quần áo mẹ và bé.</b> Giá và tồn kho theo sổ live ngày 17/09/2026.</p>
+    <p>Đặt hàng: <b class="num">0225 2666 669</b> · Zalo · Facebook. Shop gọi lại xác nhận size và địa chỉ trước khi gửi hàng.</p>
+    <p>Đổi size trong 3 ngày kể từ khi nhận hàng, sản phẩm còn nguyên tem và chưa giặt.</p>
+  </div>
+</footer>
+
+<div id="layer"></div>
+
+<script>
+const CATALOG = [{"code":"M01","name":"Áo thun xám phối quần da beo","cat":"ao","color":"#8A8681","desc":"Áo thun cotton, tay ngắn","sale":false,"sizes":[{"label":"1-2y hoặc 2-4y","col":"110 (1-2 / 2-4)","price":390000,"qty":14},{"label":"4-6y","col":"120 (4-6)","price":390000,"qty":22},{"label":"6-8y","col":"130 (6-8)","price":390000,"qty":22},{"label":"8-10y","col":"140 (8-10)","price":390000,"qty":29},{"label":"10-12y","col":"150 (10-12)","price":390000,"qty":29},{"label":"XS","col":"160 XS","price":490000,"qty":22},{"label":"S","col":"170 S","price":490000,"qty":22}],"note":"quần ghi giấy (không có trong sổ)","minPrice":390000,"maxPrice":490000,"stock":160},{"code":"M02","name":"Quần short vàng kẻ","cat":"quan","color":"#D2A63C","desc":"Quần short, đã giảm giá","sale":true,"sizes":[{"label":"1-2y","col":"1-2","price":290000,"qty":8},{"label":"2-4y","col":"2-4","price":290000,"qty":5},{"label":"6-8y","col":"6-8","price":290000,"qty":3}],"note":"quần sale 290","minPrice":290000,"maxPrice":290000,"stock":16},{"code":"M03","name":"Boot cổ cao","cat":"giay","color":"#4A3527","desc":"Boot da, cổ cao","sale":false,"sizes":[{"label":"26","col":"26","price":890000,"qty":1},{"label":"27","col":"27","price":890000,"qty":3},{"label":"29","col":"29","price":890000,"qty":5},{"label":"30","col":"30","price":890000,"qty":5},{"label":"31","col":"31","price":890000,"qty":4},{"label":"32","col":"32","price":890000,"qty":4},{"label":"33","col":"33","price":890000,"qty":6},{"label":"34","col":"34","price":890000,"qty":6},{"label":"35","col":"35","price":890000,"qty":3},{"label":"36","col":"36","price":890000,"qty":3},{"label":"37","col":"37","price":890000,"qty":5}],"note":"Không có size 28 trong sổ","minPrice":890000,"maxPrice":890000,"stock":45},{"code":"M04","name":"Váy hoa nâu Tru","cat":"vay","color":"#7A5138","desc":"Váy hoa dài tay","sale":false,"sizes":[{"label":"1-2y","col":"1-2","price":950000,"qty":50},{"label":"2-4y","col":"2-4","price":950000,"qty":41},{"label":"4-6y","col":"4-6","price":950000,"qty":44},{"label":"6-8y","col":"6-8","price":950000,"qty":22},{"label":"8-10y","col":"8-10","price":950000,"qty":7},{"label":"10-12y","col":"10-12","price":950000,"qty":9},{"label":"12-14y","col":"12-14","price":950000,"qty":10}],"note":"Sổ ghi \"còn về thêm\"","minPrice":950000,"maxPrice":950000,"stock":183},{"code":"M05","name":"Giày nâu","cat":"giay","color":"#6B4A2F","desc":"Giày da mềm","sale":false,"sizes":[{"label":"27","col":"27","price":790000,"qty":2},{"label":"28","col":"28","price":790000,"qty":3},{"label":"30","col":"30","price":790000,"qty":5},{"label":"31","col":"31","price":790000,"qty":2},{"label":"32","col":"32","price":790000,"qty":2},{"label":"33","col":"33","price":790000,"qty":12},{"label":"34","col":"34","price":790000,"qty":9},{"label":"35","col":"35","price":790000,"qty":9},{"label":"36","col":"36","price":790000,"qty":10},{"label":"37","col":"37","price":790000,"qty":9}],"note":"Không có size 29 trong sổ","minPrice":790000,"maxPrice":790000,"stock":63},{"code":"M06","name":"Set ghi lê be + sơ mi jean","cat":"set","color":"#C9B291","desc":"Ghi lê be, sơ mi jean xanh, chân váy nâu","sale":false,"sizes":[{"label":"4-6y","col":"110 (4-6)","price":690000,"qty":9},{"label":"6-8y","col":"120 (6-8)","price":690000,"qty":15},{"label":"8-10y","col":"130 (8-10)","price":690000,"qty":21},{"label":"10-12y","col":"140 (10-12)","price":690000,"qty":30},{"label":"XS","col":"150 XS","price":790000,"qty":50},{"label":"S","col":"160 S","price":790000,"qty":30},{"label":"M","col":"165 M","price":790000,"qty":1}],"note":"","minPrice":690000,"maxPrice":790000,"stock":156},{"code":"M07","name":"Set pyjama hoa hồng","cat":"set","color":"#C98A93","desc":"Bộ pyjama dài tay","sale":false,"sizes":[{"label":"4-6y","col":"4-6","price":590000,"qty":7},{"label":"6-8y","col":"6-8","price":590000,"qty":3},{"label":"8-10y","col":"8-10","price":590000,"qty":11},{"label":"10-12y","col":"10-12","price":590000,"qty":5},{"label":"12-14y","col":"12-14","price":790000,"qty":7},{"label":"S","col":"S","price":790000,"qty":36},{"label":"M","col":"M","price":790000,"qty":34}],"note":"Sổ: +1 khách đổi về","minPrice":590000,"maxPrice":790000,"stock":103},{"code":"M08","name":"Áo thun trắng mèo nâu","cat":"ao","color":"#EDE6DC","desc":"Áo thun in mèo, kèm chân váy xám","sale":false,"sizes":[{"label":"1-2y hoặc 2-4y","col":"100 (1-2 / 2-4)","price":490000,"qty":6},{"label":"4-6y","col":"110 (4-6)","price":490000,"qty":12},{"label":"6-8y","col":"120 (6-8 hoặc 4-6)","price":490000,"qty":29},{"label":"8-10y","col":"130 (8-10)","price":490000,"qty":35},{"label":"10-12y","col":"140 (10-12)","price":490000,"qty":35},{"label":"12-14y","col":"150 (12-14)","price":490000,"qty":35},{"label":"XS","col":"160 XS","price":590000,"qty":29},{"label":"S","col":"170 S","price":590000,"qty":35}],"note":"Sổ ghi \"6-8 (hoặc 4-6)\"","minPrice":490000,"maxPrice":590000,"stock":216},{"code":"M09","name":"Túi xách nâu da lộn","cat":"tui","color":"#6B4A2F","desc":"Túi da lộn, một cỡ","sale":false,"sizes":[{"label":"Freesize","col":"Freesize","price":1590000,"qty":6}],"note":"","minPrice":1590000,"maxPrice":1590000,"stock":6},{"code":"M10","name":"Áo len ghi lê trắng","cat":"ao","color":"#E7E2DA","desc":"Ghi lê len, kèm chân váy đen viền trắng","sale":false,"sizes":[{"label":"1-2y","col":"90 (1-2)","price":690000,"qty":3},{"label":"2-4y","col":"100 (2-4)","price":690000,"qty":5},{"label":"4-6y","col":"110 (4-6)","price":690000,"qty":6},{"label":"6-8y","col":"120 (6-8)","price":690000,"qty":8},{"label":"8-10y","col":"130 (8-10)","price":690000,"qty":8},{"label":"10-12y","col":"140 (10-12)","price":690000,"qty":8},{"label":"XS","col":"150 XS","price":790000,"qty":15},{"label":"S","col":"160 S","price":790000,"qty":30}],"note":"","minPrice":690000,"maxPrice":790000,"stock":83},{"code":"M11","name":"Váy xám công sở","cat":"vay","color":"#83848C","desc":"Váy xám, kèm tất ren trắng","sale":false,"sizes":[{"label":"1-2y","col":"100 (1-2)","price":890000,"qty":2},{"label":"2-4y","col":"110 (2-4)","price":890000,"qty":4},{"label":"4-6y","col":"120 (4-6)","price":890000,"qty":4},{"label":"6-8y","col":"130 (6-8)","price":890000,"qty":4},{"label":"8-10y","col":"140 (8-10)","price":890000,"qty":4},{"label":"10-12y","col":"150 (10-12)","price":890000,"qty":4},{"label":"12-14y","col":"160 (12-14)","price":890000,"qty":2}],"note":"","minPrice":890000,"maxPrice":890000,"stock":24},{"code":"M12","name":"Áo khoác kaki be","cat":"ao","color":"#C3AE8C","desc":"Áo khoác kaki, đã giảm giá","sale":true,"sizes":[{"label":"4-6y","col":"120 (4-6)","price":890000,"qty":4},{"label":"8-10y","col":"140 (8-10)","price":890000,"qty":5}],"note":"sale 890","minPrice":890000,"maxPrice":890000,"stock":9},{"code":"M13","name":"Áo sơ mi ren trắng","cat":"ao","color":"#F2EDE6","desc":"Sơ mi ren, tay dài","sale":false,"sizes":[{"label":"1-2y","col":"90 (1-2)","price":690000,"qty":3},{"label":"2-4y","col":"100 (2-4)","price":690000,"qty":6},{"label":"4-6y","col":"110 (4-6)","price":690000,"qty":6},{"label":"6-8y","col":"120 (6-8)","price":690000,"qty":6},{"label":"8-10y","col":"130 (8-10)","price":690000,"qty":6},{"label":"10-12y","col":"140 (10-12)","price":690000,"qty":6},{"label":"XS","col":"150 XS","price":750000,"qty":6},{"label":"S","col":"160 S","price":750000,"qty":10}],"note":"sổ và bảng giá chỉ có áo","minPrice":690000,"maxPrice":750000,"stock":49},{"code":"M14","name":"Áo xám hình chó tay kẻ đỏ","cat":"ao","color":"#9A958F","desc":"Áo thun dài tay, tay kẻ đỏ","sale":false,"sizes":[{"label":"4-6y","col":"110 (4-6)","price":590000,"qty":6},{"label":"6-8y","col":"120 (6-8)","price":590000,"qty":8},{"label":"8-10y","col":"130 (8-10)","price":590000,"qty":10},{"label":"10-12y","col":"140 (10-12)","price":590000,"qty":10},{"label":"XS","col":"150 XS","price":690000,"qty":18},{"label":"S","col":"160 S hoặc M","price":690000,"qty":15},{"label":"M","col":"165 M","price":690000,"qty":1}],"note":"sổ: size bằng áo M13 live cũ","minPrice":590000,"maxPrice":690000,"stock":68},{"code":"M15","name":"Áo khoác cổ kẻ nâu","cat":"ao","color":"#5C4330","desc":"Áo khoác dày, cổ kẻ","sale":false,"sizes":[{"label":"2-4y","col":"100 (2-4)","price":990000,"qty":1},{"label":"4-6y","col":"110 (4-6)","price":990000,"qty":6},{"label":"6-8y","col":"120 (6-8)","price":990000,"qty":1},{"label":"8-10y","col":"130 (8-10)","price":990000,"qty":6},{"label":"10-12y","col":"140 (10-12)","price":990000,"qty":4},{"label":"12-14y","col":"150 (12-14)","price":1090000,"qty":4},{"label":"XS hoặc S","col":"160 XS & S","price":1090000,"qty":31},{"label":"M","col":"165 M","price":1090000,"qty":14}],"note":"Sổ gộp XS và S một cột","minPrice":990000,"maxPrice":1090000,"stock":67},{"code":"M16","name":"Set kẻ xanh","cat":"set","color":"#4E6A86","desc":"Sơ mi kẻ xanh","sale":false,"sizes":[{"label":"4-6y","col":"110 (4-6)","price":790000,"qty":1},{"label":"6-8y","col":"120 (6-8)","price":790000,"qty":1},{"label":"8-10y","col":"130 (8-10)","price":790000,"qty":2},{"label":"10-12y","col":"140 (10-12)","price":790000,"qty":3},{"label":"XS","col":"150 XS","price":890000,"qty":8},{"label":"S","col":"160 S","price":890000,"qty":4}],"note":"sổ chỉ ghi áo","minPrice":790000,"maxPrice":890000,"stock":19},{"code":"M17","name":"Set áo nâu + quần jean","cat":"set","color":"#7C5E45","desc":"Áo nâu, quần jean xanh túi kẻ","sale":false,"sizes":[{"label":"8-10y","col":"130 (8-10)","price":520000,"qty":1},{"label":"10-12y","col":"140 (10-12)","price":520000,"qty":5},{"label":"12-14y","col":"150 (12-14)","price":520000,"qty":9},{"label":"XS","col":"160 XS","price":620000,"qty":4},{"label":"S","col":"165 S","price":620000,"qty":13}],"note":"","minPrice":520000,"maxPrice":620000,"stock":32},{"code":"M18","name":"Áo gió be","cat":"ao","color":"#CDBFA6","desc":"Áo gió mỏng, kèm áo khoác hồng","sale":false,"sizes":[{"label":"4-6y","col":"110 (4-6)","price":790000,"qty":10},{"label":"6-8y","col":"120 (6-8)","price":790000,"qty":10},{"label":"8-10y","col":"130 (8-10)","price":790000,"qty":10},{"label":"10-12y","col":"140 (10-12)","price":790000,"qty":8},{"label":"XS","col":"150 XS","price":890000,"qty":4},{"label":"S","col":"160 S","price":890000,"qty":5}],"note":"","minPrice":790000,"maxPrice":890000,"stock":47},{"code":"M19","name":"Quần loe hồng","cat":"quan","color":"#D79AA6","desc":"Quần loe, đã giảm giá","sale":true,"sizes":[{"label":"1-2y","col":"90 (1-2)","price":390000,"qty":1},{"label":"4-6y","col":"110 (4-6)","price":390000,"qty":1},{"label":"12-14y","col":"150 (12-14)","price":390000,"qty":1}],"note":"","minPrice":390000,"maxPrice":390000,"stock":3},{"code":"M20","name":"Quần jean xanh kèm yếm","cat":"quan","color":"#4A6382","desc":"Quần jean có yếm, đã giảm giá","sale":true,"sizes":[{"label":"1-2y","col":"90 (1-2)","price":590000,"qty":3},{"label":"2-4y","col":"100 (2-4)","price":590000,"qty":5},{"label":"4-6y","col":"110 (4-6)","price":590000,"qty":4}],"note":"sale 590","minPrice":590000,"maxPrice":590000,"stock":12},{"code":"M21","name":"Set áo gấu nâu + quần kẻ","cat":"set","color":"#8A6647","desc":"Áo gấu nâu, quần kẻ xanh","sale":false,"sizes":[{"label":"1-2y","col":"1-2","price":490000,"qty":7},{"label":"2-4y","col":"2-4","price":490000,"qty":4},{"label":"4-6y","col":"4-6","price":490000,"qty":24},{"label":"6-8y","col":"6-8","price":490000,"qty":28},{"label":"8-10y","col":"8-10","price":490000,"qty":19},{"label":"10-12y","col":"10-12","price":490000,"qty":21},{"label":"12-14y","col":"12-14","price":590000,"qty":24},{"label":"S","col":"S","price":590000,"qty":62},{"label":"M","col":"M","price":590000,"qty":18}],"note":"Sổ: +1 đổi","minPrice":490000,"maxPrice":590000,"stock":207},{"code":"M22","name":"Set 2 quần chip","cat":"quan","color":"#B9A7C4","desc":"Hai quần chip một bộ, đã giảm giá","sale":true,"sizes":[{"label":"2-3y","col":"100 (2-3)","price":250000,"qty":1},{"label":"3-4y","col":"110 (3-4)","price":250000,"qty":3},{"label":"4-6y","col":"120 (4-6)","price":250000,"qty":7},{"label":"6-8y","col":"130 (6-8)","price":250000,"qty":13}],"note":"sale 250","minPrice":250000,"maxPrice":250000,"stock":24},{"code":"M24","name":"Áo khoác nâu da lộn","cat":"ao","color":"#7D5A3C","desc":"Áo khoác da lộn, đã giảm giá","sale":true,"sizes":[{"label":"1-2y","col":"100 (1-2)","price":390000,"qty":4},{"label":"2-3y","col":"110 (2-3)","price":390000,"qty":3},{"label":"3-4y","col":"120 (3-4)","price":390000,"qty":7},{"label":"4-6y","col":"130 (4-6)","price":390000,"qty":8},{"label":"6-8y","col":"140 (6-8)","price":390000,"qty":8},{"label":"8-10y","col":"150 (8-10)","price":390000,"qty":8},{"label":"10-12y","col":"160 (10-12)","price":490000,"qty":6},{"label":"12-14y","col":"170 (12-14)","price":490000,"qty":3}],"note":"sale 390-490","minPrice":390000,"maxPrice":490000,"stock":47},{"code":"M25","name":"Váy hoa gấm đỏ","cat":"vay","color":"#9E3B33","desc":"Váy gấm, đã giảm giá","sale":true,"sizes":[{"label":"1-2y","col":"100 (1-2)","price":850000,"qty":5},{"label":"2-4y","col":"110 (2-4)","price":850000,"qty":2},{"label":"4-6y","col":"120 (4-6)","price":850000,"qty":8},{"label":"6-8y","col":"130 (6-8)","price":850000,"qty":9},{"label":"8-10y","col":"140 (8-10)","price":850000,"qty":1},{"label":"10-12y","col":"150 (10-12)","price":850000,"qty":6}],"note":"sale 850","minPrice":850000,"maxPrice":850000,"stock":31},{"code":"M26","name":"Áo khoác jean xanh","cat":"ao","color":"#496A8C","desc":"Áo khoác jean","sale":false,"sizes":[{"label":"1-2y","col":"90 (1-2)","price":690000,"qty":4},{"label":"2-4y","col":"100 (2-4)","price":690000,"qty":1},{"label":"4-6y","col":"110 (4-6)","price":690000,"qty":3}],"note":"sổ M26 chỉ có áo","minPrice":690000,"maxPrice":690000,"stock":8},{"code":"M28","name":"Áo nhung nâu","cat":"ao","color":"#6E4C36","desc":"Áo nhung, kèm chân váy kaki nâu","sale":false,"sizes":[{"label":"1-2y","col":"90 (1-2)","price":490000,"qty":6},{"label":"2-4y","col":"100 (2-4)","price":490000,"qty":4},{"label":"4-6y","col":"110 (4-6)","price":490000,"qty":1},{"label":"6-8y","col":"120 (6-8)","price":490000,"qty":3},{"label":"8-10y","col":"130 (8-10)","price":490000,"qty":9},{"label":"10-12y","col":"140 (10-12)","price":490000,"qty":11},{"label":"XS","col":"150 XS","price":590000,"qty":1},{"label":"S","col":"160 S","price":590000,"qty":13}],"note":"","minPrice":490000,"maxPrice":590000,"stock":48},{"code":"M29","name":"Váy công chúa ba lỗ","cat":"vay","color":"#D8C7D6","desc":"Váy ba lỗ, phồng","sale":false,"sizes":[{"label":"1-2y","col":"90 (1-2)","price":990000,"qty":6},{"label":"2-3y","col":"100 (2-3)","price":990000,"qty":8},{"label":"3-4y","col":"110 (3-4)","price":990000,"qty":8},{"label":"4-6y","col":"120 (4-6)","price":990000,"qty":8},{"label":"6-8y","col":"130 (6-8)","price":990000,"qty":9},{"label":"8-10y","col":"140 (8-10)","price":990000,"qty":8},{"label":"10-12y","col":"150 (10-12)","price":990000,"qty":6},{"label":"12-14y","col":"160 (12-14)","price":990000,"qty":2}],"note":"","minPrice":990000,"maxPrice":990000,"stock":55},{"code":"M30","name":"Quần loe xám","cat":"quan","color":"#8B8A86","desc":"Quần loe","sale":false,"sizes":[{"label":"1-2y","col":"90 (1-2)","price":490000,"qty":2},{"label":"2-4y","col":"100 (2-4)","price":490000,"qty":2},{"label":"4-6y","col":"110 (4-6)","price":490000,"qty":1},{"label":"6-8y","col":"120 (6-8)","price":490000,"qty":2},{"label":"12-14y","col":"150 (12-14)","price":490000,"qty":3}],"note":"","minPrice":490000,"maxPrice":490000,"stock":10}];
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const vnd = n => n.toLocaleString('vi-VN') + '₫';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const isMomSize = l => /^(XS|S|M|L)(\s|$)/i.test(l.trim());
+const isKidSize = l => /\d\s*-\s*\d+\s*y/i.test(l);
+
+const CATS = [
+  {id:'all',  label:'Tất cả'},
+  {id:'vay',  label:'Váy'},
+  {id:'ao',   label:'Áo'},
+  {id:'set',  label:'Set đồ'},
+  {id:'quan', label:'Quần'},
+  {id:'giay', label:'Giày & boot'},
+  {id:'tui',  label:'Túi'},
+];
+
+CATALOG.forEach(p => {
+  p.hasMom = p.sizes.some(s => isMomSize(s.label));
+  p.hasKid = p.sizes.some(s => isKidSize(s.label));
+  p.duo = p.hasMom && p.hasKid;
+  p.avail = p.sizes.filter(s => s.qty > 0).length;
+});
+
+/* ---------- minh hoạ sản phẩm ---------- */
+function art(p, seed){
+  const c = p.color, id = 'g' + p.code + (seed||'');
+  const shapes = {
+    vay:  `<path d="M74 52 L98 44 L102 44 L126 52 L131 96 L120 100 L152 196 L48 196 L80 100 L69 96 Z" fill="url(#${id})"/>
+           <path d="M80 100 L120 100" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
+           <circle cx="100" cy="60" r="3.2" fill="rgba(255,255,255,.5)"/><circle cx="100" cy="76" r="3.2" fill="rgba(255,255,255,.5)"/>`,
+    ao:   `<path d="M72 56 L97 46 L103 46 L128 56 L146 92 L128 100 L128 158 L72 158 L72 100 L54 92 Z" fill="url(#${id})"/>
+           <path d="M89 47 Q100 58 111 47" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2.4"/>
+           <path d="M72 100 L72 158 M128 100 L128 158" stroke="rgba(0,0,0,.08)" stroke-width="2"/>`,
+    set:  `<path d="M74 46 L96 38 L104 38 L126 46 L140 76 L126 82 L126 122 L74 122 L74 82 L60 76 Z" fill="url(#${id})"/>
+           <path d="M76 132 L124 132 L121 200 L106 200 L100 158 L94 200 L79 200 Z" fill="url(#${id})" opacity=".82"/>
+           <path d="M89 39 Q100 49 111 39" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2.2"/>`,
+    quan: `<path d="M72 54 L128 54 L131 66 L124 200 L106 200 L100 132 L94 200 L76 200 L69 66 Z" fill="url(#${id})"/>
+           <path d="M72 66 L128 66" stroke="rgba(255,255,255,.4)" stroke-width="2.6"/>
+           <path d="M100 76 L100 128" stroke="rgba(0,0,0,.1)" stroke-width="1.6"/>`,
+    giay: `<path d="M68 48 L104 48 L104 140 Q104 152 118 156 L146 164 Q156 167 156 178 L156 196 L68 196 Z" fill="url(#${id})"/>
+           <path d="M68 178 L156 178" stroke="rgba(0,0,0,.16)" stroke-width="4"/>
+           <path d="M74 66 L100 66 M74 84 L100 84 M74 102 L100 102" stroke="rgba(255,255,255,.34)" stroke-width="2.4"/>`,
+    tui:  `<path d="M58 88 L142 88 L150 186 L50 186 Z" fill="url(#${id})"/>
+           <path d="M76 88 Q76 50 100 50 Q124 50 124 88" fill="none" stroke="${c}" stroke-width="6" stroke-linecap="round"/>
+           <rect x="90" y="120" width="20" height="14" rx="3" fill="rgba(255,255,255,.4)"/>`,
+  };
+  return `<svg viewBox="0 0 200 240" role="img" aria-label="${esc(p.name)}">
+    <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${c}" stop-opacity=".95"/><stop offset="1" stop-color="${c}" stop-opacity=".7"/>
+    </linearGradient></defs>
+    <rect width="200" height="240" fill="var(--art-1)"/>
+    <ellipse cx="100" cy="210" rx="72" ry="13" fill="var(--art-2)"/>
+    ${shapes[p.cat] || shapes.ao}
+  </svg>`;
+}
+
+/* ---------- state ---------- */
+let cat = 'all', onlySale = false, onlyDuo = false, sizeF = '', sortBy = 'code', query = '';
+let cart = [];
+let myOrders = [];
+let dbReady = null;
+
+try { cart = JSON.parse(localStorage.getItem('tk_cart') || '[]') || []; } catch(e) { cart = []; }
+try { myOrders = JSON.parse(localStorage.getItem('tk_orders') || '[]') || []; } catch(e) { myOrders = []; }
+const save = () => { try {
+  localStorage.setItem('tk_cart', JSON.stringify(cart));
+  localStorage.setItem('tk_orders', JSON.stringify(myOrders));
+} catch(e){} };
+
+/* ---------- hero stats ---------- */
+$('#sMa').textContent = CATALOG.length;
+$('#sTon').textContent = CATALOG.reduce((a,p)=>a+p.stock,0).toLocaleString('vi-VN');
+$('#sDuo').textContent = CATALOG.filter(p=>p.duo).length;
+$('#sSale').textContent = CATALOG.filter(p=>p.sale).length;
+
+/* ---------- filter bar ---------- */
+$('#cats').innerHTML = CATS.map(c =>
+  `<button class="chip" data-cat="${c.id}" aria-pressed="${c.id==='all'}">${c.label}</button>`
+).join('') +
+`<button class="chip sale" id="chipSale" aria-pressed="false">Đang giảm giá</button>
+ <button class="chip" id="chipDuo" aria-pressed="false">Mặc đôi mẹ &amp; bé</button>`;
+
+const allSizes = [...new Set(CATALOG.flatMap(p=>p.sizes.map(s=>s.label)))];
+const kidS = allSizes.filter(isKidSize).sort((a,b)=>parseInt(a)-parseInt(b));
+const momS = allSizes.filter(isMomSize);
+const numS = allSizes.filter(l=>/^\d+$/.test(l)).sort((a,b)=>a-b);
+const other = allSizes.filter(l=>!isKidSize(l)&&!isMomSize(l)&&!/^\d+$/.test(l));
+$('#sizeFilter').insertAdjacentHTML('beforeend',
+  (kidS.length?`<optgroup label="Size bé (theo tuổi)">${kidS.map(s=>`<option>${esc(s)}</option>`).join('')}</optgroup>`:'') +
+  (momS.length?`<optgroup label="Size mẹ">${momS.map(s=>`<option>${esc(s)}</option>`).join('')}</optgroup>`:'') +
+  (numS.length?`<optgroup label="Size giày">${numS.map(s=>`<option>${esc(s)}</option>`).join('')}</optgroup>`:'') +
+  (other.length?`<optgroup label="Khác">${other.map(s=>`<option>${esc(s)}</option>`).join('')}</optgroup>`:'')
+);
+
+/* ---------- render grid ---------- */
+function visible(){
+  let list = CATALOG.filter(p=>{
+    if (cat !== 'all' && p.cat !== cat) return false;
+    if (onlySale && !p.sale) return false;
+    if (onlyDuo && !p.duo) return false;
+    if (sizeF && !p.sizes.some(s=>s.label===sizeF && s.qty>0)) return false;
+    if (query){
+      const t = (p.code+' '+p.name+' '+p.desc+' '+p.note).toLowerCase();
+      if (!t.includes(query)) return false;
+    }
+    return true;
+  });
+  const by = {
+    code: (a,b)=>a.code.localeCompare(b.code),
+    low:  (a,b)=>a.minPrice-b.minPrice,
+    high: (a,b)=>b.maxPrice-a.maxPrice,
+    stock:(a,b)=>b.stock-a.stock,
+  }[sortBy];
+  return list.sort(by);
+}
+
+function renderGrid(){
+  const list = visible();
+  $('#count').textContent = `${list.length} mã · ${list.reduce((a,p)=>a+p.stock,0).toLocaleString('vi-VN')} sản phẩm`;
+  $('#grid').innerHTML = list.length ? list.map(p=>{
+    const range = p.minPrice===p.maxPrice ? vnd(p.minPrice)
+      : `<span class="from">từ </span>${vnd(p.minPrice)}<span class="from"> – ${vnd(p.maxPrice)}</span>`;
+    return `<button class="card" data-code="${p.code}">
+      <div class="art">${art(p)}
+        <div class="badges">
+          ${p.sale?'<span class="bd bd-sale">Giảm giá</span>':''}
+          ${p.duo?'<span class="bd bd-duo">Mẹ &amp; bé</span>':''}
+          ${p.stock>0 && p.stock<=6?`<span class="bd bd-low">Còn ${p.stock}</span>`:''}
+        </div>
+      </div>
+      <div class="body">
+        <span class="code">${p.code}</span>
+        <h3>${esc(p.name)}</h3>
+        <div class="price">${range}</div>
+        <div class="meta">${p.avail} size còn hàng · tồn ${p.stock.toLocaleString('vi-VN')}</div>
+      </div>
+    </button>`;
+  }).join('') : `<div class="empty" style="grid-column:1/-1">Không có mã nào khớp bộ lọc. Bỏ bớt điều kiện hoặc gọi <b class="num">0225 2666 669</b> để shop tìm giúp.</div>`;
+}
+
+/* ---------- layer (modal / drawer) ---------- */
+let escHandler = null;
+function closeLayer(){
+  $('#layer').innerHTML = '';
+  if (escHandler){ document.removeEventListener('keydown', escHandler); escHandler = null; }
+}
+function openLayer(html, right){
+  $('#layer').innerHTML = `<div class="ov${right?' right':''}" data-ov>${html}</div>`;
+  escHandler = e => { if (e.key === 'Escape') closeLayer(); };
+  document.addEventListener('keydown', escHandler);
+  const first = $('#layer').querySelector('.sheet [autofocus], .sheet .x');
+  if (first) first.focus();
+}
+document.addEventListener('click', e=>{
+  if (e.target.matches('[data-ov]')) closeLayer();
+  if (e.target.closest('[data-close]')) closeLayer();
+});
+
+function toast(msg){
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg; t.setAttribute('role','status');
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 2200);
+}
+
+/* ---------- product sheet ---------- */
+let pick = { code:null, size:null, qty:1 };
+
+function openProduct(code){
+  const p = CATALOG.find(x=>x.code===code); if(!p) return;
+  const firstOk = p.sizes.findIndex(s=>s.qty>0);
+  pick = { code, size: firstOk>=0 ? firstOk : null, qty:1 };
+  openLayer(`<div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(p.name)}">
+    <div class="sheet-hd"><h2>${esc(p.name)}</h2><button class="x" data-close aria-label="Đóng">✕</button></div>
+    <div class="sheet-bd" id="pdBody"></div>
+    <div class="actions">
+      <div class="qty">
+        <button id="qMinus" aria-label="Giảm">−</button><span class="num" id="qVal">1</span><button id="qPlus" aria-label="Tăng">+</button>
+      </div>
+      <button class="btn" id="addCart">Thêm vào giỏ</button>
+    </div>
+  </div>`);
+  renderProduct();
+}
+
+function renderProduct(){
+  const p = CATALOG.find(x=>x.code===pick.code);
+  const s = pick.size!=null ? p.sizes[pick.size] : null;
+  $('#pdBody').innerHTML = `
+    <div class="pd-art">${art(p,'d')}</div>
+    <span class="code">${p.code}${p.sale?' · ĐANG GIẢM GIÁ':''}</span>
+    <p class="pd-desc">${esc(p.desc)}${p.note?' — '+esc(p.note):''}</p>
+    <div class="lbl">Chọn size · giá và số còn lại theo từng size</div>
+    <div class="sizes" id="sizes">${p.sizes.map((x,i)=>`
+      <button class="size" data-i="${i}" aria-pressed="${i===pick.size}" ${x.qty>0?'':'disabled'}>
+        <b>${esc(x.label)}</b>
+        <small>${vnd(x.price)} · ${x.qty>0?'còn '+x.qty:'hết hàng'}</small>
+      </button>`).join('')}</div>
+    ${s?`<div class="tot"><span>Giá size ${esc(s.label)}</span><b>${vnd(s.price*pick.qty)}</b></div>`:''}
+    <div class="guide">
+      <b>Chọn size thế nào cho đúng</b>
+      <ul>
+        <li>Size bé ghi theo tuổi (1-2y, 4-6y…). Bé cao hoặc mập hơn bạn cùng tuổi thì lấy lên một size.</li>
+        ${p.duo?'<li>Mã này có cả size mẹ (XS, S, M) — mặc đôi mẹ và bé được.</li>':''}
+        ${p.cat==='giay'?'<li>Giày và boot ghi theo số. Đo bàn chân bé rồi cộng thêm 0,5–1 cm.</li>':''}
+        <li>Chưa chắc size, gửi cân nặng và chiều cao của bé qua Zalo, shop chọn giúp.</li>
+        <li>Đổi size trong 3 ngày sau khi nhận, còn nguyên tem và chưa giặt.</li>
+      </ul>
+    </div>`;
+  $('#qVal').textContent = pick.qty;
+  $('#addCart').disabled = !s;
+  $('#addCart').textContent = s ? 'Thêm vào giỏ' : 'Chọn size để đặt';
+}
+
+document.addEventListener('click', e=>{
+  const card = e.target.closest('.card'); if (card) return openProduct(card.dataset.code);
+  const sz = e.target.closest('.size');
+  if (sz && !sz.disabled){
+    pick.size = +sz.dataset.i;
+    const p = CATALOG.find(x=>x.code===pick.code);
+    pick.qty = Math.min(pick.qty, p.sizes[pick.size].qty);
+    return renderProduct();
+  }
+  if (e.target.id==='qPlus' || e.target.id==='qMinus'){
+    const p = CATALOG.find(x=>x.code===pick.code);
+    const max = pick.size!=null ? p.sizes[pick.size].qty : 1;
+    pick.qty = Math.max(1, Math.min(max, pick.qty + (e.target.id==='qPlus'?1:-1)));
+    return renderProduct();
+  }
+  if (e.target.id==='addCart'){
+    const p = CATALOG.find(x=>x.code===pick.code), s = p.sizes[pick.size];
+    const key = p.code+'|'+s.label;
+    const line = cart.find(l=>l.key===key);
+    if (line) line.qty = Math.min(s.qty, line.qty + pick.qty);
+    else cart.push({key, code:p.code, name:p.name, size:s.label, price:s.price, qty:pick.qty, max:s.qty, cat:p.cat, color:p.color});
+    save(); paintCart(); closeLayer();
+    return toast(`Đã thêm ${p.name} · size ${s.label}`);
+  }
+});
+
+/* ---------- cart ---------- */
+function cartCount(){ return cart.reduce((a,l)=>a+l.qty,0); }
+function cartTotal(){ return cart.reduce((a,l)=>a+l.qty*l.price,0); }
+function paintCart(){ $('#cartCnt').textContent = cartCount(); }
+
+function openCart(){
+  openLayer(`<div class="sheet drawer" role="dialog" aria-modal="true" aria-label="Giỏ hàng">
+    <div class="sheet-hd"><h2>Giỏ hàng</h2><button class="x" data-close aria-label="Đóng">✕</button></div>
+    <div class="sheet-bd" id="cartBody"></div>
+    <div class="actions" id="cartAct"></div>
+  </div>`, true);
+  renderCart();
+}
+
+function renderCart(){
+  if (!cart.length){
+    $('#cartBody').innerHTML = `<div class="empty">Giỏ hàng đang trống.<br>Chọn một mã ở ngoài để thêm vào đây.</div>`;
+    $('#cartAct').innerHTML = `<button class="btn btn-2" data-close>Xem tiếp sản phẩm</button>`;
+    return;
+  }
+  $('#cartBody').innerHTML = cart.map((l,i)=>{
+    const p = CATALOG.find(x=>x.code===l.code) || {cat:l.cat, color:l.color, code:l.code, name:l.name};
+    return `<div class="ci">
+      <div class="ci-art">${art(p,'c'+i)}</div>
+      <div class="ci-main">
+        <h4>${esc(l.name)}</h4>
+        <p>${l.code} · size ${esc(l.size)} · ${vnd(l.price)}</p>
+        <div class="ci-row">
+          <span class="qty">
+            <button data-dec="${i}" aria-label="Giảm">−</button><span class="num">${l.qty}</span><button data-inc="${i}" aria-label="Tăng">+</button>
+          </span>
+          <span class="ci-price">${vnd(l.qty*l.price)}</span>
+          <button class="link-del" data-del="${i}">Xoá</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('') + `<div class="tot"><span>Tổng cộng (${cartCount()} sản phẩm)</span><b>${vnd(cartTotal())}</b></div>
+  <p class="hint" style="color:var(--muted);font-size:12.5px;margin:6px 0 0">Chưa gồm phí giao hàng. Shop báo phí khi gọi xác nhận.</p>`;
+  $('#cartAct').innerHTML = `<button class="btn btn-2 btn-sm" data-close>Chọn thêm</button><button class="btn" id="toCheckout">Đặt hàng</button>`;
+}
+
+document.addEventListener('click', e=>{
+  const inc = e.target.dataset?.inc, dec = e.target.dataset?.dec, del = e.target.dataset?.del;
+  if (inc!=null){ const l=cart[+inc]; l.qty=Math.min(l.max||99,l.qty+1); save(); paintCart(); return renderCart(); }
+  if (dec!=null){ const l=cart[+dec]; l.qty=Math.max(1,l.qty-1); save(); paintCart(); return renderCart(); }
+  if (del!=null){ cart.splice(+del,1); save(); paintCart(); return renderCart(); }
+  if (e.target.id==='toCheckout') return openCheckout();
+  if (e.target.id==='openCart') return openCart();
+  if (e.target.id==='openOrders') return openOrders();
+});
+
+/* ---------- checkout ---------- */
+let payMethod = 'cod';
+
+function openCheckout(){
+  openLayer(`<div class="sheet" role="dialog" aria-modal="true" aria-label="Đặt hàng">
+    <div class="sheet-hd"><h2>Thông tin nhận hàng</h2><button class="x" data-close aria-label="Đóng">✕</button></div>
+    <div class="sheet-bd">
+      <div class="tot" style="padding-top:0"><span>${cartCount()} sản phẩm</span><b>${vnd(cartTotal())}</b></div>
+      <form id="coForm" novalidate>
+        <div class="fld"><label for="cName">Tên người nhận</label><input id="cName" autofocus autocomplete="name" placeholder="Ví dụ: Nguyễn Thu Hà"></div>
+        <div class="fld"><label for="cPhone">Số điện thoại</label><input id="cPhone" inputmode="tel" autocomplete="tel" placeholder="09xx xxx xxx"><div class="hint">Shop gọi lại số này để xác nhận size và địa chỉ.</div></div>
+        <div class="fld"><label for="cAddr">Địa chỉ giao hàng</label><textarea id="cAddr" autocomplete="street-address" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành"></textarea></div>
+        <div class="fld"><label>Hình thức thanh toán</label>
+          <div class="pays">
+            <button type="button" class="pay" data-pay="cod" aria-pressed="true">Trả khi nhận hàng</button>
+            <button type="button" class="pay" data-pay="ck" aria-pressed="false">Chuyển khoản trước</button>
+          </div>
+        </div>
+        <div class="fld"><label for="cNote">Ghi chú <span style="font-weight:400;color:var(--muted)">(không bắt buộc)</span></label><textarea id="cNote" placeholder="Cân nặng, chiều cao của bé để shop kiểm tra size giúp…"></textarea></div>
+        <div class="err" id="coErr" hidden></div>
+      </form>
+    </div>
+    <div class="actions">
+      <button class="btn btn-2 btn-sm" id="backCart">Quay lại</button>
+      <button class="btn" id="submitOrder">Gửi đơn · ${vnd(cartTotal())}</button>
+    </div>
+  </div>`);
+}
+
+document.addEventListener('click', e=>{
+  const pay = e.target.closest('[data-pay]');
+  if (pay){
+    payMethod = pay.dataset.pay;
+    document.querySelectorAll('[data-pay]').forEach(b=>b.setAttribute('aria-pressed', String(b===pay)));
+    return;
+  }
+  if (e.target.id==='backCart') return openCart();
+  if (e.target.id==='submitOrder') return submitOrder();
+});
+document.addEventListener('submit', e=>{ e.preventDefault(); });
+
+function orderText(o){
+  return [
+    `ĐƠN HÀNG TRUKUKY · ${o.code}`,
+    `Khách: ${o.name} · ${o.phone}`,
+    `Địa chỉ: ${o.address}`,
+    `Thanh toán: ${o.pay==='cod'?'Trả khi nhận hàng':'Chuyển khoản trước'}`,
+    o.note ? `Ghi chú: ${o.note}` : null,
+    '',
+    ...o.items.map(l=>`• ${l.code} ${l.name} · size ${l.size} · ${l.qty} × ${vnd(l.price)} = ${vnd(l.qty*l.price)}`),
+    '',
+    `TỔNG: ${vnd(o.total)} (chưa gồm phí giao hàng)`,
+  ].filter(Boolean).join('\n');
+}
+
+async function submitOrder(){
+  const name = $('#cName').value.trim();
+  const phone = $('#cPhone').value.trim();
+  const address = $('#cAddr').value.trim();
+  const note = $('#cNote').value.trim();
+  const err = $('#coErr');
+  const digits = phone.replace(/\D/g,'');
+
+  if (!name){ err.hidden=false; err.textContent='Nhập tên người nhận để shop gọi đúng người.'; $('#cName').focus(); return; }
+  if (digits.length < 9 || digits.length > 11){ err.hidden=false; err.textContent='Số điện thoại chưa đúng. Nhập đủ 10 số, ví dụ 0912 345 678.'; $('#cPhone').focus(); return; }
+  if (address.length < 8){ err.hidden=false; err.textContent='Nhập địa chỉ đầy đủ để shop tính phí giao hàng.'; $('#cAddr').focus(); return; }
+  err.hidden = true;
+
+  const d = new Date();
+  const p2 = n => String(n).padStart(2,'0');
+  const code = `TK${String(d.getFullYear()).slice(2)}${p2(d.getMonth()+1)}${p2(d.getDate())}-${Math.random().toString(36).slice(2,6).toUpperCase()}`;
+  const order = {
+    code, name, phone, address, note, pay: payMethod,
+    items: cart.map(l=>({code:l.code, name:l.name, size:l.size, qty:l.qty, price:l.price})),
+    total: cartTotal(), createdAt: d.toISOString(), status: 'moi',
+  };
+
+  const btn = $('#submitOrder');
+  btn.disabled = true; btn.textContent = 'Đang gửi…';
+
+  let sent = false;
+  try {
+    const db = await dbReady;
+    if (db){ await db.doc('orders/'+code).set(order); sent = true; }
+  } catch(e){ sent = false; }
+
+  myOrders.unshift({...order, sent});
+  cart = []; save(); paintCart();
+  showDone(order, sent);
+}
+
+function showDone(o, sent){
+  const txt = orderText(o);
+  openLayer(`<div class="sheet" role="dialog" aria-modal="true" aria-label="Đơn hàng đã tạo">
+    <div class="sheet-hd"><h2>${sent?'Shop đã nhận đơn':'Đơn đã tạo, cần gửi cho shop'}</h2><button class="x" data-close aria-label="Đóng">✕</button></div>
+    <div class="sheet-bd">
+      <div class="done-code"><b>${o.code}</b><span>Mã đơn của bạn · ${vnd(o.total)}</span></div>
+      ${sent
+        ? `<div class="state ok"><b>Đơn đã gửi tới shop.</b>Shop gọi lại số <span class="num">${esc(o.phone)}</span> trong giờ làm việc để xác nhận size, địa chỉ và phí giao hàng.</div>`
+        : `<div class="state warn"><b>Đơn chưa gửi được tự động.</b>Sao chép nội dung bên dưới rồi gửi qua Zalo, hoặc gọi số <span class="num">0225 2666 669</span>. Đơn vẫn được lưu trên máy bạn ở mục “Đơn đã đặt”.</div>`}
+      <div class="lbl">Nội dung đơn</div>
+      <div class="copybox" id="ordTxt">${esc(txt)}</div>
+      <div class="frow2" style="margin-top:12px">
+        <button class="btn btn-2 btn-sm" id="copyOrd">Sao chép nội dung đơn</button>
+        <a class="chip-link" href="https://zalo.me/842252666669" target="_blank" rel="noopener">Mở Zalo của shop</a>
+      </div>
+      <div class="guide" style="margin-top:16px">
+        <b>Tiếp theo là gì</b>
+        <ul>
+          <li>Shop kiểm tra còn đúng size rồi gọi xác nhận.</li>
+          <li>Phí giao hàng báo khi gọi, chưa tính trong tổng ở trên.</li>
+          <li>${o.pay==='ck'?'Shop gửi số tài khoản khi gọi xác nhận, chưa cần chuyển tiền lúc này.':'Trả tiền cho người giao hàng khi nhận.'}</li>
+          <li>Cần đổi size hoặc huỷ đơn, gọi <span class="num">0225 2666 669</span> kèm mã <b>${o.code}</b>.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="actions"><button class="btn" data-close>Xong</button></div>
+  </div>`);
+  const cb = $('#copyOrd');
+  cb.addEventListener('click', async ()=>{
+    try { await navigator.clipboard.writeText(txt); cb.textContent = 'Đã sao chép'; setTimeout(()=>cb.textContent='Sao chép nội dung đơn',1800); }
+    catch(e){
+      const r = document.createRange(); r.selectNodeContents($('#ordTxt'));
+      const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      cb.textContent = 'Đã bôi đen, bấm Copy';
+    }
+  });
+}
+
+/* ---------- my orders ---------- */
+function openOrders(){
+  openLayer(`<div class="sheet" role="dialog" aria-modal="true" aria-label="Đơn đã đặt">
+    <div class="sheet-hd"><h2>Đơn đã đặt</h2><button class="x" data-close aria-label="Đóng">✕</button></div>
+    <div class="sheet-bd">${
+      myOrders.length ? `<p class="pd-desc">Lưu trên máy này. Mở bằng máy khác sẽ không thấy — gọi <span class="num">0225 2666 669</span> kèm mã đơn để tra cứu.</p>
+      <div class="orders-list">${myOrders.map(o=>`
+        <div class="ord">
+          <div class="ord-hd"><b>${o.code}</b><span class="num">${vnd(o.total)}</span></div>
+          <div style="font-size:12.5px;color:var(--muted)">${new Date(o.createdAt).toLocaleString('vi-VN')} · ${o.sent?'đã gửi shop':'chưa gửi shop'}</div>
+          <ul>${o.items.map(l=>`<li>${esc(l.name)} · size ${esc(l.size)} · ${l.qty} cái</li>`).join('')}</ul>
+        </div>`).join('')}</div>`
+      : `<div class="empty">Chưa có đơn nào trên máy này.</div>`
+    }</div>
+    <div class="actions"><button class="btn btn-2" data-close>Đóng</button></div>
+  </div>`);
+}
+
+/* ---------- filter events ---------- */
+$('#cats').addEventListener('click', e=>{
+  const b = e.target.closest('.chip'); if(!b) return;
+  if (b.id==='chipSale'){ onlySale=!onlySale; b.setAttribute('aria-pressed',String(onlySale)); }
+  else if (b.id==='chipDuo'){ onlyDuo=!onlyDuo; b.setAttribute('aria-pressed',String(onlyDuo)); }
+  else {
+    cat = b.dataset.cat;
+    $('#cats').querySelectorAll('[data-cat]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  }
+  renderGrid();
+});
+$('#sizeFilter').addEventListener('change', e=>{ sizeF=e.target.value; renderGrid(); });
+$('#sort').addEventListener('change', e=>{ sortBy=e.target.value; renderGrid(); });
+$('#q').addEventListener('input', e=>{ query=e.target.value.trim().toLowerCase(); renderGrid(); });
+
+/* ---------- boot ---------- */
+renderGrid(); paintCart();
+dbReady = (window.claude?.use ? window.claude.use('db').catch(()=>null) : Promise.resolve(null));
+</script>
