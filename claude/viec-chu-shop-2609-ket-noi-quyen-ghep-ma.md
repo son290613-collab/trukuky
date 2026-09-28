@@ -343,6 +343,10 @@ Một tab có thể chứa **nhiều khối món**: M10 có 3 khối (áo ghi l�
 | M28 | áo 48 · chân váy 18 | 48 | 18 |
 | M17 | áo 32 · quần 7 | 32 | 7 |
 | M18 | áo gió 47 · khoác hồng 1 | 47 | 1 |
+| M22+M23 | hai mã chung một tab | chỉ M22 | **19** (cả mã M23) |
+| M26+M27 | hai mã chung một tab | chỉ M26 | **1** (cả mã M27) |
+
+679 chiếc thiếu do bỏ khối món, cộng 20 chiếc thiếu do bỏ hẳn mã thứ hai trong tab chung — tổng đúng 699, **một nguyên nhân duy nhất: chỉ chép khối đầu của mỗi tab**.
 
 Quần da beo M01 — món 150 chiếc đặt — **có tồn 139 chiếc ghi rõ trong sổ**, nhưng không có trong file chép tay. Mọi phân tích dựa trên file đó đều thiếu món này.
 
