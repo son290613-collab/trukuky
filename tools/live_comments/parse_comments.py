@@ -410,6 +410,8 @@ def xu_ly(duong_vao, thu_muc_ra, ten_shop=None):
     for (nguoi, ma, mon, size), o in don.items():
         cau[(ma or CHUA_RO, size)]["dat"] += o["sl"]
         cau[(ma or CHUA_RO, size)]["khach"] += 1
+        if o["do_tin"] == "chac":
+            cau[(ma or CHUA_RO, size)]["dat_chac"] += o["sl"]
     for d in ds:
         if d["nhan"] not in ("hoi-con", "hoi-gia", "hoi-size"):
             continue
@@ -417,10 +419,17 @@ def xu_ly(duong_vao, thu_muc_ra, ten_shop=None):
         for size in (d["size"] or [""]):
             cau[(ma, size)][d["nhan"]] += 1
     ghi("nhu_cau_theo_ma_size.csv",
-        ["Mã", "Size khách gọi", "Số chiếc đặt", "Số khách đặt", "Hỏi còn", "Hỏi giá", "Hỏi size"],
-        [[ma, size, c["dat"], c["khach"], c["hoi-con"], c["hoi-gia"], c["hoi-size"]]
+        ["Mã", "Size khách gọi", "Số chiếc đặt", "Trong đó ghi rõ mã", "Số khách đặt",
+         "Hỏi còn", "Hỏi giá", "Hỏi size"],
+        [[ma, size, c["dat"], c["dat_chac"], c["khach"],
+          c["hoi-con"], c["hoi-gia"], c["hoi-size"]]
          for (ma, size), c in sorted(cau.items(),
                                      key=lambda kv: (kv[0][0] == CHUA_RO, -kv[1]["dat"], kv[0]))])
+
+    theo_ma = defaultdict(Counter)                 # gộp theo mã để soi mã chỉ có dòng suy luận
+    for (ma, _size), c in cau.items():
+        theo_ma[ma]["dat"] += c["dat"]
+        theo_ma[ma]["dat_chac"] += c["dat_chac"]
 
     nguoi_dat = {k[0] for k in don}
     hoi_rows = []
@@ -452,6 +461,9 @@ def xu_ly(duong_vao, thu_muc_ra, ten_shop=None):
         "suy_luan_do_chinh_xac_phan_tram": do_chinh_xac,
         "suy_luan_do_tren_bao_nhieu_dong": trung + lech,
         "suy_luan_cua_so_giay": GIOI_HAN_SUY_LUAN,
+        "ma_khong_co_dong_nao_ghi_ro": sorted(
+            ma for ma, c in theo_ma.items()
+            if ma != CHUA_RO and c["dat"] and not c["dat_chac"]),
         "khach_hoi_ma_khong_thay_dat": len({r[1] for r in hoi_rows}),
         "khong_doc_duoc_thoi_diem": sum(1 for d in ds if d["giay"] is None),
     }

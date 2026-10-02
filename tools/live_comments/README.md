@@ -49,7 +49,7 @@ Buổi live 09/09 đã làm đúng cách này (sổ `binh-luan-live-0909-day-du`
 |---|---|
 | `binh_luan_phan_loai.csv` | mỗi bình luận một dòng kèm nhãn, mã, size, số lượng máy đọc được |
 | `chot_don_theo_khach.csv` | **phiếu chốt đơn**: mỗi khách × mã × món × size một dòng, có cột trống để nhân viên điền size chốt, mã KiotViet và kết quả |
-| `nhu_cau_theo_ma_size.csv` | cầu theo mã × size: số chiếc đặt, số khách, số lượt hỏi còn / hỏi giá / hỏi size |
+| `nhu_cau_theo_ma_size.csv` | cầu theo mã × size: số chiếc đặt, **trong đó bao nhiêu chiếc từ bình luận ghi rõ mã**, số khách, số lượt hỏi còn / hỏi giá / hỏi size |
 | `can_hoi_lai.csv` | khách hỏi giá, hỏi còn, hỏi size mà **không thấy đặt** — danh sách nhắn lại, có link trang cá nhân |
 | `tom_tat.json` | số tổng hợp cho báo cáo Chủ tịch |
 
@@ -76,6 +76,13 @@ Kết quả ghi ở `tom_tat.json` → `suy_luan_do_chinh_xac_phan_tram`.
 
 Đo trên live 09/09: **84,3%** (trên 83 dòng kiểm được, cửa sổ 120 giây). Các cách khác đều
 tệ hơn: lấy mốc từ mọi bình luận có mã còn 76%, bỏ giới hạn thời gian còn 71%.
+
+`tom_tat.json` còn ghi `ma_khong_co_dong_nao_ghi_ro`: các mã mà **không bình luận nào**
+ghi rõ, tức toàn bộ cầu của mã đó là suy luận. Live 09/09 có 10 mã như vậy
+(M02, M31, M34, M38, M39, M41–M45) — trong đó M38 và M45 đứng thứ hai và thứ ba về số
+chiếc đặt. Không được coi đó là mẫu bán chạy: rất có thể máy đã dồn các bình luận chỉ có
+size vào mã được niêm yết gần nhất. Cột "Trong đó ghi rõ mã" bằng 0 là dấu hiệu phải
+kiểm tay trước khi nhập hàng theo nó.
 
 Nghĩa là khoảng **1/6 dòng `suy-luan` gán sai mã**. Đừng đưa thẳng vào đơn: cột
 "Size chốt" và "Kết quả" trong phiếu là để người xác nhận. Cách chữa gốc nằm ở buổi live,
