@@ -1,0 +1,8 @@
+# File ra có tên khách — không bao giờ commit (nội quy: không đưa dữ liệu khách vào kho mã)
+ra/
+ra*/
+out/
+binh_luan_phan_loai.csv
+chot_don_theo_khach.csv
+can_hoi_lai.csv
+tom_tat.json
