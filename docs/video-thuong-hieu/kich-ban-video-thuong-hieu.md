@@ -2,6 +2,8 @@
 
 *Bản nháp 1 · 14/11/2026. Chỗ nào ghi **[cần xác nhận]** là giả định của tôi, chưa phải sự thật về Trukuky.*
 
+> **Cập nhật:** phim chính được chốt không quá 1 phút 30 giây. Lời thoại bản rút gọn nằm ở [`loi-thoai-90-giay.md`](loi-thoai-90-giay.md); kịch bản 10 nhịp dưới đây giữ lại làm bản đầy đủ để tham khảo và để cắt các đoạn ngắn.
+
 ## 1. Tóm tắt
 
 - **Nên làm gì:** một phim chính dài khoảng 2 phút 15 giây theo lối phim tài liệu ngắn của RICE (video bạn gửi), cắt thêm 3 đoạn 30–40 giây, rồi nối bằng một series hằng tuần.
